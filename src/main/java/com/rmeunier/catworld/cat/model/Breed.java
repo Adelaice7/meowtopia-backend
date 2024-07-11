@@ -1,0 +1,48 @@
+package com.rmeunier.catworld.cat.model;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+
+import java.util.Set;
+import java.util.UUID;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "breeds")
+public class Breed {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "breed_id")
+    private UUID breedId;
+
+    @NonNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "life_span", nullable = false)
+    private int lifeSpan;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fur_type")
+    private FurType furType;
+
+    @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<Cat> cats;
+
+    public Breed(String name, String description, int lifeSpan, FurType furType) {
+        this.name = name;
+        this.description = description;
+        this.lifeSpan = lifeSpan;
+        this.furType = furType;
+    }
+}
