@@ -7,7 +7,8 @@ import com.rmeunier.catworld.cat.exception.CatNotFoundException;
 import com.rmeunier.catworld.cat.model.Cat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,23 +34,24 @@ public class CatServiceImpl implements CatService {
 
     @Override
     public List<Cat> getAllCats() {
-        List<Cat> allCats = catRepository.findAll();
-        if (allCats.isEmpty()) {
-            throw new CatNotFoundException();
-        }
-        return allCats;
+        return catRepository.findAll();
     }
 
+    @Override
+    public List<Cat> getAllCatsByUserAccountId(UUID userAccountId) {
+        return catRepository.findByUserAccountId(userAccountId);
+    }
 
     @Override
-    public Page<Cat> getAllCatsPaged(Pageable pageable) {
-//        List<Cat> allCats = catRepository.findAll(pageable);
-//        if (allCats.isEmpty()) {
-//            throw new CatNotFoundException();
-//        }
-//        return allCats;
-        // TODO fix this
-        return null;
+    public Page<Cat> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return catRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<Cat> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return catRepository.findByUserAccountId(userAccountId, pageRequest);
     }
 
     @Override

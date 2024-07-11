@@ -4,6 +4,10 @@ import com.rmeunier.catworld.user.exception.UserAccountNotFoundException;
 import com.rmeunier.catworld.user.model.UserAccount;
 import com.rmeunier.catworld.user.repo.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +26,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public List<UserAccount> getAllUserAccounts() {
         return userAccountRepository.findAll();
+    }
+
+    public Page<UserAccount> getFilteredUserAccounts(Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return userAccountRepository.findAll(pageRequest);
     }
 
     @Override

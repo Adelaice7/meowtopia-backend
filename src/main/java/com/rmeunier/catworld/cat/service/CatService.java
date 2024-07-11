@@ -12,7 +12,11 @@ public interface CatService {
 
     List<Cat> getAllCats();
 
-    Page<Cat> getAllCatsPaged(Pageable pageable);
+    List<Cat> getAllCatsByUserAccountId(UUID userAccountId);
+
+    Page<Cat> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction);
+
+    Page<Cat> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction);
 
     Cat createCat(UUID breedId, Cat cat);
 

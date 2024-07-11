@@ -1,5 +1,6 @@
 package com.rmeunier.catworld.user.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rmeunier.catworld.cat.model.Cat;
 import com.rmeunier.catworld.shop.model.PetToy;
 import jakarta.persistence.*;
@@ -53,6 +54,7 @@ public class UserAccount /* extends User */ {
     private UserProfile userProfile;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userAccount")
+    @JsonManagedReference
     private Set<Cat> cats;
 
     @ManyToMany(fetch = FetchType.EAGER)

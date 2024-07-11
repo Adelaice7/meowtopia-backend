@@ -25,6 +25,8 @@ public class Cat {
     private UUID catId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_account_id")
+    @JsonBackReference
     private UserAccount userAccount;
 
     @Column(name = "created_at")
