@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rmeunier.catworld.user.model.UserAccount;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ public class Cat {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @NonNull
+    @NotNull
     @Column(name = "cat_id")
     private UUID catId;
 
@@ -40,15 +43,18 @@ public class Cat {
     // Basic information
 
     @NonNull
+    @NotNull(message = "Name is required")
+    @NotEmpty(message = "Name is required")
     @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "breed_id")
+    @JoinColumn(name = "breed_id", nullable = false)
     @JsonBackReference("breed-cats")
     private Breed breed;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Color is required")
     @Column(name = "color")
     private CatColor color;
 
@@ -61,6 +67,8 @@ public class Cat {
     private int age;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Gender is required")
+    @NotEmpty(message = "Gender cannot be empty")
     @Column(name = "gender", nullable = false)
     private Gender gender;
 

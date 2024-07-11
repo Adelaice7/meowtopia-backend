@@ -1,31 +1,31 @@
 package com.rmeunier.catworld.cat.service;
 
-import com.rmeunier.catworld.cat.model.Cat;
+import com.rmeunier.catworld.cat.model.dto.CatDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface CatService {
-    Cat findById(UUID id);
+    CatDto findById(UUID catId);
 
-    List<Cat> getAllCats();
+    List<CatDto> getAllCats();
 
-    List<Cat> getAllCatsByUserAccountId(UUID userAccountId);
+    List<CatDto> getAllCatsByUserAccountId(UUID userAccountId);
 
-    Page<Cat> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction);
+    Page<CatDto> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction);
 
-    Page<Cat> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction);
+    Page<CatDto> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction);
 
-    Cat createCat(UUID breedId, Cat cat);
+    CatDto createCat(UUID breedId, CatDto catDto);
 
-    Cat modifyCat(UUID id, Cat updatedCat);
+    CatDto modifyCat(UUID catId, CatDto updatedCatDto);
 
-    void deleteCat(UUID id);
+    void deleteCat(UUID catId);
 
-    List<Cat> findByBreedId(UUID breedId);
+    List<CatDto> findByBreedId(UUID breedId);
 
-    List<Cat> findByBreedName(String breedName);
+    List<CatDto> findByBreedName(String breedName);
 
     void updateAllCatAges();
 }

@@ -5,6 +5,7 @@ import com.rmeunier.catworld.user.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -12,26 +13,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final UserAccountRepository userAccountRepository;
-
     private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    public SecurityConfiguration(UserAccountRepository userAccountRepository, CustomUserDetailsService customUserDetailsService) {
-        this.userAccountRepository = userAccountRepository;
+    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -39,12 +34,6 @@ public class SecurityConfiguration {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(UserAccountRepository userAccountRepository) {
-//        return username -> userAccountRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("Username not found: " + username));
-//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -60,7 +49,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/user/signup**", "/error**", "/js/**", "/css/**", "/img/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                        .requestMatchers("/error**", "/js/**", "/css/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout(lOut -> lOut

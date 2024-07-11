@@ -1,7 +1,11 @@
 package com.rmeunier.catworld.cat.service;
 
 import com.rmeunier.catworld.cat.exception.BreedNotFoundException;
+import com.rmeunier.catworld.cat.mapper.BreedMapper;
+import com.rmeunier.catworld.cat.mapper.CatMapper;
 import com.rmeunier.catworld.cat.model.Breed;
+import com.rmeunier.catworld.cat.model.dto.BreedDto;
+import com.rmeunier.catworld.cat.model.dto.CatDto;
 import com.rmeunier.catworld.cat.repository.CatRepository;
 import com.rmeunier.catworld.cat.exception.CatNotFoundException;
 import com.rmeunier.catworld.cat.model.Cat;
@@ -28,36 +32,48 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public Cat findById(UUID catId) {
-        return catRepository.findById(catId).orElseThrow(() -> new CatNotFoundException(catId));
+    public CatDto findById(UUID catId) {
+        return catRepository.findById(catId)
+                .map(CatMapper.INSTANCE::mapToDto)
+                .orElseThrow(() -> new CatNotFoundException(catId));
     }
 
     @Override
-    public List<Cat> getAllCats() {
-        return catRepository.findAll();
+    public List<CatDto> getAllCats() {
+        return catRepository.findAll()
+                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .toList();
     }
 
     @Override
-    public List<Cat> getAllCatsByUserAccountId(UUID userAccountId) {
-        return catRepository.findByUserAccountUserAccountId(userAccountId);
+    public List<CatDto> getAllCatsByUserAccountId(UUID userAccountId) {
+        return catRepository.findByUserAccountUserAccountId(userAccountId)
+                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .toList();
     }
 
     @Override
-    public Page<Cat> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction) {
+    public Page<CatDto> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return catRepository.findAll(pageRequest);
+        return catRepository.findAll(pageRequest)
+                .map(CatMapper.INSTANCE::mapToDto);
     }
 
     @Override
-    public Page<Cat> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction) {
+    public Page<CatDto> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return catRepository.findByUserAccountUserAccountId(userAccountId, pageRequest);
+        return catRepository.findByUserAccountUserAccountId(userAccountId, pageRequest)
+                .map(CatMapper.INSTANCE::mapToDto);
     }
 
     @Override
-    public Cat createCat(UUID breedId, Cat cat) {
+    public CatDto createCat(UUID breedId, CatDto catDto) {
+        Cat cat = CatMapper.INSTANCE.mapToEntity(catDto);
+
         // TODO validation
-        Breed breedById = breedService.getBreedById(breedId);
+        BreedDto breedDtoById = breedService.getBreedById(breedId);
+        Breed breedById = BreedMapper.mapToEntity(breedDtoById);
+
         if (breedById == null) {
             throw new BreedNotFoundException(breedId);
         }
@@ -69,11 +85,13 @@ public class CatServiceImpl implements CatService {
         } else {
             cat.setAge(cat.calculateAge());
         }
-        return catRepository.save(cat);
+        Cat save = catRepository.save(cat);
+        return CatMapper.INSTANCE.mapToDto(save);
     }
 
     @Override
-    public Cat modifyCat(UUID catId, Cat updatedCat) {
+    public CatDto modifyCat(UUID catId, CatDto updatedCatDto) {
+        Cat updatedCat = CatMapper.INSTANCE.mapToEntity(updatedCatDto);
         Cat existingCat = catRepository.findById(catId).orElseThrow(() -> new CatNotFoundException(catId));
         // TODO validation
         existingCat.setName(updatedCat.getName());
@@ -104,7 +122,8 @@ public class CatServiceImpl implements CatService {
         existingCat.setEnergy(updatedCat.getEnergy());
         existingCat.setCleanliness(updatedCat.getCleanliness());
 
-        return catRepository.save(existingCat);
+        Cat save = catRepository.save(existingCat);
+        return CatMapper.INSTANCE.mapToDto(save);
     }
 
     @Override
@@ -117,16 +136,20 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public List<Cat> findByBreedId(UUID breedId) {
-        List<Cat> cats = catRepository.findByBreedBreedId(breedId);
+    public List<CatDto> findByBreedId(UUID breedId) {
+        List<CatDto> cats = catRepository.findByBreedBreedId(breedId)
+                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .toList();
         if (cats.isEmpty()) {
             throw new CatNotFoundException();
         }
         return cats;
     }
 
-    public List<Cat> findByBreedName(String breedName) {
-        List<Cat> cats = catRepository.findByBreedName(breedName);
+    public List<CatDto> findByBreedName(String breedName) {
+        List<CatDto> cats = catRepository.findByBreedName(breedName)
+                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .toList();
         if (cats.isEmpty()) {
             throw new CatNotFoundException();
         }

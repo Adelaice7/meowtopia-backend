@@ -1,5 +1,7 @@
 package com.rmeunier.catworld.cat.service;
 
+import com.rmeunier.catworld.cat.mapper.BreedMapper;
+import com.rmeunier.catworld.cat.model.dto.BreedDto;
 import com.rmeunier.catworld.cat.repository.BreedRepository;
 import com.rmeunier.catworld.cat.exception.BreedNotFoundException;
 import com.rmeunier.catworld.cat.model.Breed;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BreedServiceImpl implements BreedService{
+public class BreedServiceImpl implements BreedService {
     private final BreedRepository breedRepository;
 
     @Autowired
@@ -19,34 +21,41 @@ public class BreedServiceImpl implements BreedService{
     }
 
     @Override
-    public List<Breed> getAllBreeds() {
-        List<Breed> allBreeds = breedRepository.findAll();
+    public List<BreedDto> getAllBreeds() {
+        List<BreedDto> allBreeds = breedRepository.findAll()
+                .stream().map(BreedMapper::mapToDto)
+                .toList();
+
         if (allBreeds.isEmpty()) {
             throw new BreedNotFoundException();
         }
+
         return allBreeds;
     }
 
     @Override
-    public Breed getBreedById(UUID breedId) {
+    public BreedDto getBreedById(UUID breedId) {
         return breedRepository.findById(breedId)
+                .map(BreedMapper::mapToDto)
                 .orElseThrow(() -> new BreedNotFoundException(breedId));
     }
 
     @Override
-    public Breed getBreedByName(String breedName) {
-        return breedRepository.findBreedByName(breedName)
-                .orElseThrow(() -> new BreedNotFoundException(breedName));
+    public BreedDto searchBreedByName(String name) {
+        // TODO implement search
+        return null;
     }
 
     @Override
-    public Breed createBreed(Breed breed) {
-        // TODO validation
-        return breedRepository.save(breed);
+    public BreedDto createBreed(BreedDto breedDto) {
+        Breed breed = BreedMapper.mapToEntity(breedDto);
+        Breed save = breedRepository.save(breed);
+        return BreedMapper.mapToDto(save);
     }
 
     @Override
-    public Breed updateBreed(UUID breedId, Breed breed) {
+    public BreedDto updateBreed(UUID breedId, BreedDto breedDto) {
+        Breed breed = BreedMapper.mapToEntity(breedDto);
         Breed existingBreed = breedRepository.findById(breedId)
                 .orElseThrow(() -> new BreedNotFoundException(breedId));
 
@@ -56,7 +65,8 @@ public class BreedServiceImpl implements BreedService{
         existingBreed.setLifeSpan(breed.getLifeSpan());
         existingBreed.setFurType(breed.getFurType());
 
-        return breedRepository.save(existingBreed);
+        Breed save = breedRepository.save(existingBreed);
+        return BreedMapper.mapToDto(save);
     }
 
     @Override

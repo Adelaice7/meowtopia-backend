@@ -33,7 +33,7 @@ public class Breed {
     @Column(name = "fur_type")
     private FurType furType;
 
-    @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference("breed-cats")
     private Set<Cat> cats;
 

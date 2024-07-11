@@ -1,5 +1,6 @@
 package com.rmeunier.catworld.user.api;
 
+import com.rmeunier.catworld.cat.model.Cat;
 import com.rmeunier.catworld.other.GenericResponse;
 import com.rmeunier.catworld.user.model.dto.UserAccountDto;
 import com.rmeunier.catworld.user.service.UserAccountService;
@@ -41,11 +42,16 @@ public class UserAccountApi {
     }
 
     @GetMapping("/{userAccountId}")
-    public ResponseEntity<UserAccountDto> getUserById(@PathVariable("userAccountId") UUID userAccountId) {
+    public ResponseEntity<UserAccountDto> getUserAccountById(@PathVariable("userAccountId") UUID userAccountId) {
         return ResponseEntity.ok(userAccountService.getUserAccountById(userAccountId));
     }
 
-    @PostMapping("/signup")
+//    @GetMapping("{userAccountId}/cats")
+//    public ResponseEntity<List<Cat>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
+//        return ResponseEntity.ok(userAccountService.getAllCatsByUserAccountId(userAccountId));
+//    }
+
+    @PostMapping
     public ResponseEntity<UserAccountDto> signUpAndCreateUserAccount(@RequestBody @Valid UserAccountDto userAccountDto) {
         return ResponseEntity.ok(userAccountService.createUserAccount(userAccountDto));
     }

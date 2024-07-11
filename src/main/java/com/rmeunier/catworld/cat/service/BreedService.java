@@ -1,20 +1,21 @@
 package com.rmeunier.catworld.cat.service;
 
 import com.rmeunier.catworld.cat.model.Breed;
+import com.rmeunier.catworld.cat.model.dto.BreedDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface BreedService {
-    List<Breed> getAllBreeds();
+    List<BreedDto> getAllBreeds();
 
-    Breed getBreedById(UUID breedId);
+    BreedDto getBreedById(UUID breedId);
 
-    Breed getBreedByName(String name);
+    BreedDto searchBreedByName(String name);
 
-    Breed createBreed(Breed breed);
+    BreedDto createBreed(BreedDto breed);
 
-    Breed updateBreed(UUID breedId, Breed breed);
+    BreedDto updateBreed(UUID breedId, BreedDto breed);
 
     void deleteBreed(UUID breedId);
 }

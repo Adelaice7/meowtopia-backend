@@ -60,7 +60,7 @@ public class UserAccount implements UserDetails {
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "userAccount")
     private UserProfile userProfile;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userAccount")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("user-cats")
     private Set<Cat> cats;
 
