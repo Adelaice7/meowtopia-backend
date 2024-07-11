@@ -20,31 +20,49 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public List<ShopProduct> getAllProducts() {
-        return List.of();
+        return shopRepository.findAll();
     }
 
     @Override
     public ShopProduct getProductById(UUID shopProductId) {
-        return null;
+        return shopRepository.findById(shopProductId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
     }
 
     @Override
     public ShopProduct addProduct(ShopProduct product) {
-        return null;
+        return shopRepository.save(product);
     }
 
     @Override
     public ShopProduct buyProduct(UUID shopProductId) {
+        // TODO implement buyProduct
+        // user inventory of items grows, shop stock of product shrinks
+        // user currency lowers
         return null;
     }
 
     @Override
-    public ShopProduct updateProduct(ShopProduct product) {
-        return null;
+    public ShopProduct updateProduct(UUID shopProductId, ShopProduct product) {
+        ShopProduct existingShopProduct = shopRepository.findById(shopProductId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        existingShopProduct.setName(product.getName());
+        existingShopProduct.setPrice(product.getPrice());
+        existingShopProduct.setStock(product.getStock());
+        existingShopProduct.setDescription(product.getDescription());
+        existingShopProduct.setImage(product.getImage());
+
+        return shopRepository.save(existingShopProduct);
     }
 
     @Override
     public void deleteProduct(UUID shopProductId) {
-        // TODO implement deleteProduct
+        // TODO custom exception
+        if (!shopRepository.existsById(shopProductId)) {
+            throw new IllegalArgumentException("Product not found");
+        } else {
+            shopRepository.deleteById(shopProductId);
+        }
     }
 }

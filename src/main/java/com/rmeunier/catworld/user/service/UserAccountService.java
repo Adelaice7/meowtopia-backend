@@ -1,6 +1,6 @@
 package com.rmeunier.catworld.user.service;
 
-import com.rmeunier.catworld.user.model.UserAccount;
+import com.rmeunier.catworld.user.model.dto.UserAccountDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -8,17 +8,17 @@ import java.util.UUID;
 
 public interface UserAccountService {
 
-    List<UserAccount> getAllUserAccounts();
+    List<UserAccountDto> getAllUserAccounts();
 
-    Page<UserAccount> getFilteredUserAccounts(Integer page, Integer size, String orderBy, String direction);
+    Page<UserAccountDto> getFilteredUserAccounts(Integer page, Integer size, String orderBy, String direction);
 
-    UserAccount getUserAccountById(UUID userAccountId);
+    UserAccountDto getUserAccountById(UUID userAccountId);
 
-    UserAccount getUserAccountByUsername(String username);
+    UserAccountDto getUserAccountByUsername(String username);
 
-    UserAccount createUserAccount(UserAccount userAccount);
+    UserAccountDto createUserAccount(UserAccountDto userAccountDto);
 
-    UserAccount updateUserAccount(UUID userAccountId, UserAccount userAccount);
+    UserAccountDto updateUserAccount(UUID userAccountId, UserAccountDto userAccountDto);
 
     void deleteUserAccount(UUID userAccountId);
 }

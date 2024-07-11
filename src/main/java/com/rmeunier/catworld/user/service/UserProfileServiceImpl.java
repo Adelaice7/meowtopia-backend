@@ -1,8 +1,10 @@
 package com.rmeunier.catworld.user.service;
 
 import com.rmeunier.catworld.user.exception.UserProfileNotFoundException;
+import com.rmeunier.catworld.user.mapper.UserAccountMapper;
 import com.rmeunier.catworld.user.model.UserAccount;
 import com.rmeunier.catworld.user.model.UserProfile;
+import com.rmeunier.catworld.user.model.dto.UserAccountDto;
 import com.rmeunier.catworld.user.repo.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile createUserProfileForUserAccount(UUID userAccountId, UserProfile userProfile) {
-        UserAccount userAccountById = userAccountService.getUserAccountById(userAccountId);
+        UserAccountDto userAccountDtoById = userAccountService.getUserAccountById(userAccountId);
+        UserAccount userAccountById = UserAccountMapper.mapToEntity(userAccountDtoById);
 
         userProfile.setUserAccount(userAccountById);
 
@@ -43,7 +46,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile updateUserProfile(UUID userAccountId, UserProfile userProfile) {
-        UserAccount userAccountById = userAccountService.getUserAccountById(userAccountId);
+        UserAccountDto userAccountDtoById = userAccountService.getUserAccountById(userAccountId);
+        UserAccount userAccountById = UserAccountMapper.mapToEntity(userAccountDtoById);
 
         userProfile.setUserAccount(userAccountById);
 

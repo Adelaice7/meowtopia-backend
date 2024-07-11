@@ -2,15 +2,13 @@ package com.rmeunier.catworld.shop.model;
 
 import com.rmeunier.catworld.user.model.UserAccount;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "pet_toys")
 public class PetToy extends ShopProduct {

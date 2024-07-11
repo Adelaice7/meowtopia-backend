@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS user_accounts {
+CREATE TABLE IF NOT EXISTS user_accounts (
     user_account_id UUID PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -7,11 +7,11 @@ CREATE TABLE IF NOT EXISTS user_accounts {
     enabled BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    };
+);
 
 CREATE TABLE user_profiles (
     user_profile_id UUID PRIMARY KEY,
-    user_account_id UUID REFERENCES users(id),
+    user_account_id UUID REFERENCES user_accounts(user_account_id),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     bio TEXT,

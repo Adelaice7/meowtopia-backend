@@ -2,17 +2,15 @@ package com.rmeunier.catworld.cat.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
+@ToString
 @Entity
 @Table(name = "breeds")
 public class Breed {
@@ -36,7 +34,7 @@ public class Breed {
     private FurType furType;
 
     @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("breed-cats")
     private Set<Cat> cats;
 
     public Breed(String name, String description, int lifeSpan, FurType furType) {

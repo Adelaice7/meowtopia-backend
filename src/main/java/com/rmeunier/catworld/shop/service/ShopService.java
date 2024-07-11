@@ -16,7 +16,7 @@ public interface ShopService {
 
     ShopProduct buyProduct(UUID shopProductId);
 
-    ShopProduct updateProduct(ShopProduct product);
+    ShopProduct updateProduct(UUID shopProductId, ShopProduct product);
 
     void deleteProduct(UUID shopProductId);
 }

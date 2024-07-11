@@ -7,8 +7,14 @@ import java.util.UUID;
 
 public interface BreedService {
     List<Breed> getAllBreeds();
+
     Breed getBreedById(UUID breedId);
+
+    Breed getBreedByName(String name);
+
     Breed createBreed(Breed breed);
+
     Breed updateBreed(UUID breedId, Breed breed);
+
     void deleteBreed(UUID breedId);
 }

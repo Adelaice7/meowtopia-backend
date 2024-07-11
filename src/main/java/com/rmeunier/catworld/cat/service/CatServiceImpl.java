@@ -39,7 +39,7 @@ public class CatServiceImpl implements CatService {
 
     @Override
     public List<Cat> getAllCatsByUserAccountId(UUID userAccountId) {
-        return catRepository.findByUserAccountId(userAccountId);
+        return catRepository.findByUserAccountUserAccountId(userAccountId);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CatServiceImpl implements CatService {
     @Override
     public Page<Cat> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return catRepository.findByUserAccountId(userAccountId, pageRequest);
+        return catRepository.findByUserAccountUserAccountId(userAccountId, pageRequest);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CatServiceImpl implements CatService {
 
     @Override
     public List<Cat> findByBreedId(UUID breedId) {
-        List<Cat> cats = catRepository.findByBreedId(breedId);
+        List<Cat> cats = catRepository.findByBreedBreedId(breedId);
         if (cats.isEmpty()) {
             throw new CatNotFoundException();
         }

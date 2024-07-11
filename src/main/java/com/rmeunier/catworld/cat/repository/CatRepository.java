@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Repository
 public interface CatRepository extends JpaRepository<Cat, UUID> {
-    List<Cat> findByBreedId(UUID breedId);
+    List<Cat> findByBreedBreedId(UUID breedId);
     List<Cat> findByBreedName(String breedName);
-    List<Cat> findByUserAccountId(UUID userAccountId);
-    Page<Cat> findByUserAccountId(UUID userAccountId, Pageable pageable);
+    List<Cat> findByUserAccountUserAccountId(UUID userAccountId);
+    Page<Cat> findByUserAccountUserAccountId(UUID userAccountId, Pageable pageable);
 }

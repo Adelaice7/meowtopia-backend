@@ -1,16 +1,15 @@
 package com.rmeunier.catworld.user.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
+@ToString
 @Entity(name = "user_profiles")
 @Table(name = "user_profiles")
 public class UserProfile {

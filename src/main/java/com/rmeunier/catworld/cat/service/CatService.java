@@ -2,7 +2,6 @@ package com.rmeunier.catworld.cat.service;
 
 import com.rmeunier.catworld.cat.model.Cat;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;

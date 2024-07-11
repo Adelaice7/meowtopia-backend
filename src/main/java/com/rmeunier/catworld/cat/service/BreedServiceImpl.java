@@ -34,6 +34,12 @@ public class BreedServiceImpl implements BreedService{
     }
 
     @Override
+    public Breed getBreedByName(String breedName) {
+        return breedRepository.findBreedByName(breedName)
+                .orElseThrow(() -> new BreedNotFoundException(breedName));
+    }
+
+    @Override
     public Breed createBreed(Breed breed) {
         // TODO validation
         return breedRepository.save(breed);

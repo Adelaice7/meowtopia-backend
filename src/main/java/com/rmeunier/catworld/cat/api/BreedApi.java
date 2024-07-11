@@ -30,7 +30,7 @@ public class BreedApi {
         return new ResponseEntity<>(breedService.getBreedById(breedId), HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Breed> createBreed(@RequestBody Breed breed) {
         return new ResponseEntity<>(breedService.createBreed(breed), HttpStatus.CREATED);
     }

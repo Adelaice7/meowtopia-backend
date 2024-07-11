@@ -1,13 +1,15 @@
 package com.rmeunier.catworld.user.service;
 
 import com.rmeunier.catworld.user.exception.UserAccountNotFoundException;
+import com.rmeunier.catworld.user.mapper.UserAccountMapper;
 import com.rmeunier.catworld.user.model.UserAccount;
+import com.rmeunier.catworld.user.model.dto.UserAccountDto;
 import com.rmeunier.catworld.user.repo.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,48 +20,62 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userAccountRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository,
+                                  PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public List<UserAccount> getAllUserAccounts() {
-        return userAccountRepository.findAll();
+    public List<UserAccountDto> getAllUserAccounts() {
+        return userAccountRepository.findAll().stream()
+                .map(UserAccountMapper::mapToDto)
+                .toList();
     }
 
-    public Page<UserAccount> getFilteredUserAccounts(Integer page, Integer size, String orderBy, String direction) {
+    public Page<UserAccountDto> getFilteredUserAccounts(Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return userAccountRepository.findAll(pageRequest);
+        return userAccountRepository.findAll(pageRequest)
+                .map(UserAccountMapper::mapToDto);
     }
 
     @Override
-    public UserAccount getUserAccountById(UUID userAccountId) {
-        return userAccountRepository.findById(userAccountId)
+    public UserAccountDto getUserAccountById(UUID userAccountId) {
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
                 .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
+        return UserAccountMapper.mapToDto(userAccount);
     }
 
     @Override
-    public UserAccount getUserAccountByUsername(String username) {
-        return userAccountRepository.findByUsername(username)
+    public UserAccountDto getUserAccountByUsername(String username) {
+        UserAccount userAccount = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new UserAccountNotFoundException("Username not found: " + username));
+        return UserAccountMapper.mapToDto(userAccount);
     }
 
     @Override
-    public UserAccount createUserAccount(UserAccount userAccount) {
-        // TODO validation
-        return userAccountRepository.save(userAccount);
+    public UserAccountDto createUserAccount(UserAccountDto userAccountDto) {
+        UserAccount userAccount = UserAccountMapper.mapToEntity(userAccountDto);
+        userAccount.setPasswordHash(passwordEncoder.encode(userAccount.getPassword()));
+        UserAccount save = userAccountRepository.save(userAccount);
+        return UserAccountMapper.mapToDto(save);
     }
 
     @Override
-    public UserAccount updateUserAccount(UUID userAccountId, UserAccount userAccount) {
+    public UserAccountDto updateUserAccount(UUID userAccountId, UserAccountDto userAccountDto) {
 
         UserAccount existitngUserAccount = userAccountRepository.findById(userAccountId)
                 .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
 
+        UserAccount userAccount = UserAccountMapper.mapToEntity(userAccountDto);
         existitngUserAccount.setUserProfile(userAccount.getUserProfile());
+
         // TODO fix this
-        return userAccountRepository.save(existitngUserAccount);
+        UserAccount saved = userAccountRepository.save(existitngUserAccount);
+        return UserAccountMapper.mapToDto(saved);
     }
 
     @Override

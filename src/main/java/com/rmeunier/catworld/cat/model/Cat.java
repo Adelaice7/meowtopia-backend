@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rmeunier.catworld.user.model.UserAccount;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Getter @Setter
+@AllArgsConstructor
+@Builder
+@ToString
 @Entity
 @Table(name = "cats")
 public class Cat {
@@ -26,7 +26,7 @@ public class Cat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_account_id")
-    @JsonBackReference
+    @JsonBackReference("user-cats")
     private UserAccount userAccount;
 
     @Column(name = "created_at")
@@ -45,7 +45,7 @@ public class Cat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "breed_id")
-    @JsonBackReference
+    @JsonBackReference("breed-cats")
     private Breed breed;
 
     @Enumerated(EnumType.STRING)
