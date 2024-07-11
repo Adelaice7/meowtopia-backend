@@ -5,13 +5,11 @@ import com.rmeunier.catworld.user.model.UserProfile;
 import java.util.UUID;
 
 public interface UserProfileService {
-    // Add methods for user profile management
-    // Example: getProfileById, updateProfile, deleteProfile
+
     UserProfile getUserProfileById(UUID userProfileId);
 
-    UserProfile createUserProfile(UserProfile userProfile);
+    UserProfile createUserProfileForUserAccount(UUID userAccountId, UserProfile userProfile);
 
-    UserProfile updateUserProfile(UserProfile userProfile);
+    UserProfile updateUserProfile(UUID userProfileId, UserProfile userProfile);
 
-    void deleteUserProfile(UUID userProfileId);
 }

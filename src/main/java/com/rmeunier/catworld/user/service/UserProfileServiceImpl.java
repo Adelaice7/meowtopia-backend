@@ -1,5 +1,7 @@
 package com.rmeunier.catworld.user.service;
 
+import com.rmeunier.catworld.user.exception.UserProfileNotFoundException;
+import com.rmeunier.catworld.user.model.UserAccount;
 import com.rmeunier.catworld.user.model.UserProfile;
 import com.rmeunier.catworld.user.repo.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,30 +12,43 @@ import java.util.UUID;
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
 
+    private final UserAccountService userAccountService;
+
     private final UserProfileRepository userProfileRepository;
 
     @Autowired
-    public UserProfileServiceImpl(UserProfileRepository userProfileRepository) {
+    public UserProfileServiceImpl(UserAccountService userAccountService,
+                                  UserProfileRepository userProfileRepository) {
+        this.userAccountService = userAccountService;
         this.userProfileRepository = userProfileRepository;
     }
 
+
     @Override
     public UserProfile getUserProfileById(UUID userProfileId) {
-        return null;
+        return userProfileRepository.findById(userProfileId)
+                .orElseThrow(() -> new UserProfileNotFoundException(userProfileId));
     }
 
     @Override
-    public UserProfile createUserProfile(UserProfile userProfile) {
-        return null;
+    public UserProfile createUserProfileForUserAccount(UUID userAccountId, UserProfile userProfile) {
+        UserAccount userAccountById = userAccountService.getUserAccountById(userAccountId);
+
+        userProfile.setUserAccount(userAccountById);
+
+        // TODO validation on user profile
+
+        return userProfileRepository.save(userProfile);
     }
 
     @Override
-    public UserProfile updateUserProfile(UserProfile userProfile) {
-        return null;
-    }
+    public UserProfile updateUserProfile(UUID userAccountId, UserProfile userProfile) {
+        UserAccount userAccountById = userAccountService.getUserAccountById(userAccountId);
 
-    @Override
-    public void deleteUserProfile(UUID userProfileId) {
+        userProfile.setUserAccount(userAccountById);
 
+        // TODO validation on user profile
+
+        return userProfileRepository.save(userProfile);
     }
 }
