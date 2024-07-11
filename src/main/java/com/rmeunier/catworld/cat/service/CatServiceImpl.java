@@ -170,6 +170,13 @@ public class CatServiceImpl implements ICatService {
         return cats;
     }
 
+    @Override
+    public Page<CatDto> findByBreedId(UUID breedId, Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return catRepository.findByBreedBreedId(breedId, pageRequest)
+                .map(CatMapper.INSTANCE::mapToDto);
+    }
+
     public List<CatDto> findByBreedName(String breedName) {
         List<CatDto> cats = catRepository.findByBreedName(breedName)
                 .stream().map(CatMapper.INSTANCE::mapToDto)

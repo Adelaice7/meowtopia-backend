@@ -29,7 +29,7 @@ public interface ICatService {
 
     List<CatDto> findByBreedId(UUID breedId);
 
-    List<CatDto> findByBreedName(String breedName);
+    Page<CatDto> findByBreedId(UUID breedId, Integer page, Integer size, String orderBy, String direction);
 
     void updateAllCatAges();
 }

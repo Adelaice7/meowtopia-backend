@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,11 +31,6 @@ public class CatApi {
         return ResponseEntity.ok(catService.getAllCats(page, size, orderBy, direction));
     }
 
-    @GetMapping("/user/{userAccountId}")
-    public ResponseEntity<List<CatDto>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
-        return ResponseEntity.ok(catService.getAllCatsByUserAccountId(userAccountId));
-    }
-
     @GetMapping("/user/{userAccountId}/filtered")
     public ResponseEntity<Page<CatDto>> getAllCatsByUserAccountIdFiltered(@PathVariable("userAccountId") UUID userAccountId,
                                                                           @RequestParam("page") Integer page,
@@ -44,6 +38,16 @@ public class CatApi {
                                                                           @RequestParam("orderBy") String orderBy,
                                                                           @RequestParam("direction") String direction) {
         return ResponseEntity.ok(catService.getAllCatsByUserAccountIdFiltered(userAccountId, page, size, orderBy, direction));
+    }
+
+    @GetMapping("/breed/{breedId}")
+    public ResponseEntity<Page<CatDto>> getAllCatsByBreedId(@PathVariable UUID breedId,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "createdAt") String orderBy,
+                                                            @RequestParam(defaultValue = "DESC") String direction ) {
+        Page<CatDto> catPage = catService.findByBreedId(breedId, page, size, orderBy, direction);
+        return ResponseEntity.ok(catPage);
     }
 
     @GetMapping("/{catId}")
