@@ -1,53 +1,57 @@
 package com.rmeunier.catworld.cat.api;
 
 import com.rmeunier.catworld.cat.model.dto.BreedDto;
-import com.rmeunier.catworld.cat.service.BreedService;
+import com.rmeunier.catworld.cat.service.IBreedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/breeds")
 public class BreedApi {
-    private final BreedService breedService;
+    private final IBreedService breedService;
 
     @Autowired
-    public BreedApi(BreedService breedService) {
+    public BreedApi(IBreedService breedService) {
         this.breedService = breedService;
     }
 
     @GetMapping
-    public ResponseEntity<List<BreedDto>> getAllBreeds() {
-        return new ResponseEntity<>(breedService.getAllBreeds(), HttpStatus.OK);
+    public ResponseEntity<Page<BreedDto>> getAllBreeds(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size,
+                                                       @RequestParam(defaultValue = "name") String orderBy,
+                                                       @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(breedService.getAllBreeds(page, size, orderBy, direction));
     }
-
-//    @GetMapping("/{breedId}/cats")
-//    public ResponseEntity<List<Breed>> getAllCatsByBreedId(@PathVariable("breedId") UUID breedId) {
-//
-//    }
 
     @GetMapping("/{breedId}")
     public ResponseEntity<BreedDto> getBreedById(@PathVariable("breedId") UUID breedId) {
-        return new ResponseEntity<>(breedService.getBreedById(breedId), HttpStatus.OK);
+        return ResponseEntity.ok(breedService.getBreedById(breedId));
     }
 
     @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<BreedDto> createBreed(@RequestBody BreedDto breed) {
-        return new ResponseEntity<>(breedService.createBreed(breed), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(breedService.createBreed(breed));
     }
 
     @PutMapping("/{breedId}")
-    public ResponseEntity<BreedDto> updateBreed(@PathVariable("breedId") UUID breedId, @RequestBody BreedDto updatedBreed) {
-        return new ResponseEntity<>(breedService.updateBreed(breedId, updatedBreed), HttpStatus.OK);
+    public ResponseEntity<BreedDto> updateBreed(@PathVariable("breedId") UUID breedId, @RequestBody BreedDto updateBreed) {
+        BreedDto updatedBreed = breedService.updateBreed(breedId, updateBreed);
+        if (updatedBreed != null) {
+            return ResponseEntity.ok(updatedBreed);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{breedId}")
     public ResponseEntity<Void> deleteBreed(@PathVariable("breedId") UUID breedId) {
-        breedService.deleteBreed(breedId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (breedService.deleteBreed(breedId)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

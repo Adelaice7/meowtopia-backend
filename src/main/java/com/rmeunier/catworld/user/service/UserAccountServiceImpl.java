@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UserAccountServiceImpl implements UserAccountService {
+public class UserAccountServiceImpl implements IUserAccountService {
 
     private final UserAccountRepository userAccountRepository;
 
@@ -66,24 +66,31 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccountDto updateUserAccount(UUID userAccountId, UserAccountDto userAccountDto) {
+        UserAccount existingUserAccount = userAccountRepository.findById(userAccountId).orElse(null);
+        if (existingUserAccount != null) {
+            // Update existingUserAccount fields with userAccountDTO fields
+            // Here we update username and email only for example, you can add more
+            existingUserAccount.setUsername(userAccountDto.getUsername());
+            existingUserAccount.setEmail(userAccountDto.getEmail());
 
-        UserAccount existitngUserAccount = userAccountRepository.findById(userAccountId)
-                .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
+            // Save updated user account
+            existingUserAccount = userAccountRepository.save(existingUserAccount);
 
-        UserAccount userAccount = UserAccountMapper.mapToEntity(userAccountDto);
-        existitngUserAccount.setUserProfile(userAccount.getUserProfile());
-
-        // TODO fix this
-        UserAccount saved = userAccountRepository.save(existitngUserAccount);
-        return UserAccountMapper.mapToDto(saved);
-    }
-
-    @Override
-    public void deleteUserAccount(UUID userAccountId) {
-        if (userAccountRepository.existsById(userAccountId)) {
-            userAccountRepository.deleteById(userAccountId);
+            // Map updated user account back to DTO
+            return UserAccountMapper.mapToDto(existingUserAccount);
         } else {
             throw new UserAccountNotFoundException(userAccountId);
         }
+    }
+
+    @Override
+    public boolean deleteUserAccount(UUID userAccountId) {
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
+        if (userAccount != null) {
+            userAccountRepository.delete(userAccount);
+            return true;
+        }
+        return false;
     }
 }

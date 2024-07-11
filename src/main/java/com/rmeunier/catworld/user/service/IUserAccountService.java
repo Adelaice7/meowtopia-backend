@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.UUID;
 
-public interface UserAccountService {
+public interface IUserAccountService {
 
     List<UserAccountDto> getAllUserAccounts();
 
@@ -20,5 +20,5 @@ public interface UserAccountService {
 
     UserAccountDto updateUserAccount(UUID userAccountId, UserAccountDto userAccountDto);
 
-    void deleteUserAccount(UUID userAccountId);
+    boolean deleteUserAccount(UUID userAccountId);
 }

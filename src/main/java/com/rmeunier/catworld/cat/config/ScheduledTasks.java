@@ -1,6 +1,6 @@
 package com.rmeunier.catworld.cat.config;
 
-import com.rmeunier.catworld.cat.service.CatService;
+import com.rmeunier.catworld.cat.service.ICatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class ScheduledTasks {
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    private final CatService catService;
+    private final ICatService catService;
 
     @Autowired
-    public ScheduledTasks(CatService catService) {
+    public ScheduledTasks(ICatService catService) {
         this.catService = catService;
     }
 

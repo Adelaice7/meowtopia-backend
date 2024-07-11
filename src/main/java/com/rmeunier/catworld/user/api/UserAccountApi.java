@@ -1,9 +1,8 @@
 package com.rmeunier.catworld.user.api;
 
-import com.rmeunier.catworld.cat.model.Cat;
 import com.rmeunier.catworld.other.GenericResponse;
 import com.rmeunier.catworld.user.model.dto.UserAccountDto;
-import com.rmeunier.catworld.user.service.UserAccountService;
+import com.rmeunier.catworld.user.service.IUserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,26 +13,20 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
 @Validated
 public class UserAccountApi {
-    private final UserAccountService userAccountService;
+    private final IUserAccountService userAccountService;
 
     @Autowired
-    public UserAccountApi(UserAccountService userAccountService) {
+    public UserAccountApi(IUserAccountService userAccountService) {
         this.userAccountService = userAccountService;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserAccountDto>> getAllUsers() {
-        return ResponseEntity.ok(userAccountService.getAllUserAccounts());
-    }
-
-    @GetMapping("/filtered")
     public ResponseEntity<Page<UserAccountDto>> getFilteredUsers(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                               @RequestParam(value = "size", defaultValue = "3") Integer size,
                                                               @RequestParam(value = "orderBy", defaultValue = "lastName") String orderBy,
@@ -45,11 +38,6 @@ public class UserAccountApi {
     public ResponseEntity<UserAccountDto> getUserAccountById(@PathVariable("userAccountId") UUID userAccountId) {
         return ResponseEntity.ok(userAccountService.getUserAccountById(userAccountId));
     }
-
-//    @GetMapping("{userAccountId}/cats")
-//    public ResponseEntity<List<Cat>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
-//        return ResponseEntity.ok(userAccountService.getAllCatsByUserAccountId(userAccountId));
-//    }
 
     @PostMapping
     public ResponseEntity<UserAccountDto> signUpAndCreateUserAccount(@RequestBody @Valid UserAccountDto userAccountDto) {

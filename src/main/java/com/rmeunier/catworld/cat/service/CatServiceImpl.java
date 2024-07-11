@@ -20,22 +20,25 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CatServiceImpl implements CatService {
+public class CatServiceImpl implements ICatService {
     private final CatRepository catRepository;
 
-    private final BreedService breedService;
+    private final IBreedService breedService;
 
     @Autowired
-    public CatServiceImpl(CatRepository catRepository, BreedService breedService) {
+    public CatServiceImpl(CatRepository catRepository, IBreedService breedService) {
         this.catRepository = catRepository;
         this.breedService = breedService;
     }
 
     @Override
     public CatDto findById(UUID catId) {
-        return catRepository.findById(catId)
-                .map(CatMapper.INSTANCE::mapToDto)
+        Cat cat = catRepository.findById(catId)
                 .orElseThrow(() -> new CatNotFoundException(catId));
+        if (cat != null) {
+            return CatMapper.INSTANCE.mapToDto(cat);
+        }
+        return null;
     }
 
     @Override
@@ -43,6 +46,13 @@ public class CatServiceImpl implements CatService {
         return catRepository.findAll()
                 .stream().map(CatMapper.INSTANCE::mapToDto)
                 .toList();
+    }
+
+    @Override
+    public Page<CatDto> getAllCats(Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return catRepository.findAll(pageRequest)
+                .map(CatMapper.INSTANCE::mapToDto);
     }
 
     @Override
@@ -90,10 +100,22 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public CatDto modifyCat(UUID catId, CatDto updatedCatDto) {
+    public CatDto createCat(CatDto catDto) {
+        Cat cat = CatMapper.INSTANCE.mapToEntity(catDto);
+        cat = catRepository.save(cat);
+        return CatMapper.INSTANCE.mapToDto(cat);
+    }
+
+    @Override
+    public CatDto updateCat(UUID catId, CatDto updatedCatDto) {
         Cat updatedCat = CatMapper.INSTANCE.mapToEntity(updatedCatDto);
-        Cat existingCat = catRepository.findById(catId).orElseThrow(() -> new CatNotFoundException(catId));
-        // TODO validation
+        Cat existingCat = catRepository.findById(catId)
+                .orElseThrow(() -> new CatNotFoundException(catId));
+
+        if (existingCat == null) {
+            throw new CatNotFoundException(catId);
+        }
+
         existingCat.setName(updatedCat.getName());
         existingCat.setBreed(updatedCat.getBreed());
         existingCat.setColor(updatedCat.getColor());
@@ -127,12 +149,14 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
-    public void deleteCat(UUID catId) {
-        if (!catRepository.existsById(catId)) {
-            throw new CatNotFoundException(catId);
-        } else {
-            catRepository.deleteById(catId);
+    public boolean deleteCat(UUID catId) {
+        Cat cat = catRepository.findById(catId)
+                .orElseThrow(() -> new CatNotFoundException(catId));
+        if (cat != null) {
+            catRepository.delete(cat);
+            return true;
         }
+        return false;
     }
 
     @Override

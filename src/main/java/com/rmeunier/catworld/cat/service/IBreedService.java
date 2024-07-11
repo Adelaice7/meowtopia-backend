@@ -1,13 +1,15 @@
 package com.rmeunier.catworld.cat.service;
 
-import com.rmeunier.catworld.cat.model.Breed;
 import com.rmeunier.catworld.cat.model.dto.BreedDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface BreedService {
+public interface IBreedService {
     List<BreedDto> getAllBreeds();
+
+    Page<BreedDto> getAllBreeds(Integer page, Integer size, String orderBy, String direction);
 
     BreedDto getBreedById(UUID breedId);
 
@@ -17,5 +19,5 @@ public interface BreedService {
 
     BreedDto updateBreed(UUID breedId, BreedDto breed);
 
-    void deleteBreed(UUID breedId);
+    boolean deleteBreed(UUID breedId);
 }

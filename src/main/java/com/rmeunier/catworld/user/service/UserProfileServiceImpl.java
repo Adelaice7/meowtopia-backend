@@ -14,12 +14,12 @@ import java.util.UUID;
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
 
-    private final UserAccountService userAccountService;
+    private final IUserAccountService userAccountService;
 
     private final UserProfileRepository userProfileRepository;
 
     @Autowired
-    public UserProfileServiceImpl(UserAccountService userAccountService,
+    public UserProfileServiceImpl(IUserAccountService userAccountService,
                                   UserProfileRepository userProfileRepository) {
         this.userAccountService = userAccountService;
         this.userProfileRepository = userProfileRepository;

@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.UUID;
 
-public interface CatService {
+public interface ICatService {
     CatDto findById(UUID catId);
 
     List<CatDto> getAllCats();
+
+    Page<CatDto> getAllCats(Integer page, Integer size, String orderBy, String direction);
 
     List<CatDto> getAllCatsByUserAccountId(UUID userAccountId);
 
@@ -19,9 +21,11 @@ public interface CatService {
 
     CatDto createCat(UUID breedId, CatDto catDto);
 
-    CatDto modifyCat(UUID catId, CatDto updatedCatDto);
+    CatDto createCat(CatDto catDto);
 
-    void deleteCat(UUID catId);
+    CatDto updateCat(UUID catId, CatDto updatedCatDto);
+
+    boolean deleteCat(UUID catId);
 
     List<CatDto> findByBreedId(UUID breedId);
 

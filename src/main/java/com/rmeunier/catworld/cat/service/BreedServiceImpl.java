@@ -6,13 +6,16 @@ import com.rmeunier.catworld.cat.repository.BreedRepository;
 import com.rmeunier.catworld.cat.exception.BreedNotFoundException;
 import com.rmeunier.catworld.cat.model.Breed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BreedServiceImpl implements BreedService {
+public class BreedServiceImpl implements IBreedService {
     private final BreedRepository breedRepository;
 
     @Autowired
@@ -31,6 +34,13 @@ public class BreedServiceImpl implements BreedService {
         }
 
         return allBreeds;
+    }
+
+    @Override
+    public Page<BreedDto> getAllBreeds(Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return breedRepository.findAll(pageRequest)
+                .map(BreedMapper::mapToDto);
     }
 
     @Override
@@ -70,10 +80,14 @@ public class BreedServiceImpl implements BreedService {
     }
 
     @Override
-    public void deleteBreed(UUID breedId) {
-        if (!breedRepository.existsById(breedId)) {
-            throw new BreedNotFoundException(breedId);
+    public boolean deleteBreed(UUID breedId) {
+        Breed breed = breedRepository.findById(breedId)
+                .orElseThrow(() -> new BreedNotFoundException(breedId));
+
+        if (breed != null) {
+            breedRepository.delete(breed);
+            return true;
         }
-        breedRepository.deleteById(breedId);
+        return false;
     }
 }
