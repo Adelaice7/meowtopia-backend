@@ -1,5 +1,6 @@
 package com.rmeunier.catworld.shop.model;
 
+import com.rmeunier.catworld.user.model.Product;
 import com.rmeunier.catworld.user.model.UserAccount;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,20 +8,15 @@ import lombok.*;
 import java.util.Set;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Entity
 @Table(name = "pet_toys")
-public class PetToy extends ShopProduct {
-    @Column(name = "quantity")
-    private int quantity;
+public class PetToy extends Product {
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
-    @ManyToMany(mappedBy = "petToys", fetch = FetchType.LAZY)
-    private Set<UserAccount> users;
-
-    public PetToy(String name, double price, int quantity,
-                  String image, String description, int stock) {
-        super(name, price, description, image, ShopCategory.TOYS, stock);
-        this.quantity = quantity;
+    public PetToy(String name, Double price, String description) {
+        super(name, price);
+        this.description = description;
     }
 }

@@ -3,6 +3,7 @@ package com.rmeunier.catworld.user.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rmeunier.catworld.cat.model.Cat;
 import com.rmeunier.catworld.shop.model.PetToy;
+import com.rmeunier.catworld.shop.model.Transaction;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -63,6 +64,12 @@ public class UserAccount implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("user-cats")
     private Set<Cat> cats;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user_account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserInventoryItem> inventoryItems = new HashSet<>();
+
+    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL)
+    private Set<Transaction> transactions;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_pet_toys",

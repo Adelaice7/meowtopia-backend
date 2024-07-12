@@ -60,10 +60,6 @@ public class Cat {
     @Column(name = "weight")
     private int weight;
 
-    @Column(name = "birth_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate birthDate;
-
     @Transient
     private long ageInDays;
 
@@ -80,6 +76,7 @@ public class Cat {
     private boolean isFixed;
 
     // Personality traits
+
     @Column(name = "playfulness")
     private int playfulness;
 
@@ -122,16 +119,17 @@ public class Cat {
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date createdAt;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date updatedAt;
 
     // Constructors
 
     public Cat() {
-        this.ageInDays = calculateAge();
         setBasicStats();
     }
 
@@ -139,14 +137,16 @@ public class Cat {
 
     public int calculateAge() {
         LocalDate currentDate = LocalDate.now();
-        if (birthDate != null) {
-            return (int) ChronoUnit.DAYS.between(birthDate, currentDate);
+        if (createdAt != null) {
+            return (int) ChronoUnit.DAYS.between(DateConverterUtil.dateToLocalDateTime(createdAt), currentDate);
         } else {
             return 0;
         }
     }
 
     private void setBasicStats() {
+        this.ageInDays = calculateAge();
+
         this.health = 80;
         this.hunger = 50;
         this.thirst = 50;
@@ -154,6 +154,8 @@ public class Cat {
         this.happiness = 70;
         this.cleanliness = 50;
         this.weight = 50;
+
+        setPersonalityStats();
     }
 
     private void setPersonalityStats() {

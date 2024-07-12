@@ -9,6 +9,7 @@ import com.rmeunier.catworld.cat.model.dto.CatDto;
 import com.rmeunier.catworld.cat.repository.CatRepository;
 import com.rmeunier.catworld.cat.exception.CatNotFoundException;
 import com.rmeunier.catworld.cat.model.Cat;
+import com.rmeunier.catworld.cat.utils.DateConverterUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,8 +92,8 @@ public class CatServiceImpl implements ICatService {
         cat.setBreed(breedById);
 
         LocalDate currentDate = LocalDate.now();
-        if (cat.getBirthDate() == null) {
-            cat.setBirthDate(currentDate);
+        if (cat.getCreatedAt() == null) {
+            cat.setCreatedAt(DateConverterUtil.localDateToDate(currentDate));
         } else {
             cat.setAgeInDays(cat.calculateAge());
         }
@@ -122,10 +123,12 @@ public class CatServiceImpl implements ICatService {
         existingCat.setFurColor(updatedCat.getFurColor());
         existingCat.setEyeColor(updatedCat.getEyeColor());
 
-        if (updatedCat.getBirthDate() != null && existingCat.getBirthDate() != updatedCat.getBirthDate()) {
-            existingCat.setBirthDate(updatedCat.getBirthDate());
+        LocalDate currentDate = LocalDate.now();
+        if (updatedCat.getUpdatedAt() != null && existingCat.getUpdatedAt() != updatedCat.getUpdatedAt()) {
+            existingCat.setUpdatedAt(DateConverterUtil.localDateToDate(currentDate));
             existingCat.setAgeInDays(updatedCat.calculateAge());
         }
+
         existingCat.setGender(updatedCat.getGender());
         existingCat.setWeight(updatedCat.getWeight());
         existingCat.setFixed(updatedCat.isFixed());

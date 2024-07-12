@@ -23,4 +23,8 @@ public class DateConverterUtil {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
+
+    public static Date localDateToDate(LocalDate dateToConvert) {
+        return Date.from(dateToConvert.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
 }

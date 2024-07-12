@@ -1,6 +1,6 @@
 package com.rmeunier.catworld.shop.model;
 
-public enum ShopCategory {
+public enum ItemType {
     TOYS,
     FOOD,
     ACCESSORIES,
