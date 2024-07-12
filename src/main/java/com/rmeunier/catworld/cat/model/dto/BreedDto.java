@@ -1,6 +1,6 @@
 package com.rmeunier.catworld.cat.model.dto;
 
-import com.rmeunier.catworld.cat.model.FurType;
+import com.rmeunier.catworld.cat.model.CatFurType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -23,5 +23,5 @@ public class BreedDto {
     private int lifeSpan;
 
     @NotNull(message = "Fur type is required")
-    private FurType furType;
+    private CatFurType furType;
 }

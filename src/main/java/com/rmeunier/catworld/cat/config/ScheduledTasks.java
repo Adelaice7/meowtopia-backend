@@ -28,7 +28,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 1 1 * * ?")
     public void updateCatsAges() {
         logger.info("Updating cats ages...");
-        catService.updateAllCatAges();
+        catService.updateAllCatAgesAndLifeStages();
         logger.info("Cats ages updated.");
     }
 }

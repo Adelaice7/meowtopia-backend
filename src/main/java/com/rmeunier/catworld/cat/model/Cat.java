@@ -2,6 +2,7 @@ package com.rmeunier.catworld.cat.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rmeunier.catworld.cat.utils.DateConverterUtil;
 import com.rmeunier.catworld.user.model.UserAccount;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,6 +12,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 @Getter @Setter
@@ -32,14 +34,6 @@ public class Cat {
     @JsonBackReference("user-cats")
     private UserAccount userAccount;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
-
     // Basic information
 
     @NonNull
@@ -53,18 +47,28 @@ public class Cat {
     @JsonBackReference("breed-cats")
     private Breed breed;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Color is required")
-    @Column(name = "color")
-    private CatColor color;
+    // store a hexadecimal color code
+    @NotNull(message = "Fur color is required")
+    @Column(name = "fur_color")
+    private String furColor;
+
+    // store a hexadecimal color code
+    @NotNull(message = "Eye color is required")
+    @Column(name = "eye_color")
+    private String eyeColor;
+
+    @Column(name = "weight")
+    private int weight;
 
     @Column(name = "birth_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate birthDate;
 
-    // Age in days
     @Transient
-    private int age;
+    private long ageInDays;
+
+    @Transient
+    private CatLifeStage lifeStage;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Gender is required")
@@ -72,22 +76,15 @@ public class Cat {
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @Column(name = "weight")
-    private int weight;
-
     @Column(name = "is_fixed")
     private boolean isFixed;
 
     // Personality traits
+    @Column(name = "playfulness")
+    private int playfulness;
 
-    @Column(name = "intelligence")
-    private int intelligence;
-
-    @Column(name = "sociability")
-    private int sociability;
-
-    @Column(name = "activity")
-    private int activity;
+    @Column(name = "affectionate")
+    private int affectionate;
 
     @Column(name = "curiosity")
     private int curiosity;
@@ -95,19 +92,16 @@ public class Cat {
     @Column(name = "independence")
     private int independence;
 
-    @Column(name = "stubbornness")
-    private int stubbornness;
+    @Column(name = "laziness")
+    private int laziness;
 
-    @Column(name = "playfulness")
-    private int playfulness;
+    @Column(name = "intelligence")
+    private int intelligence;
 
-    @Column(name = "affection")
-    private int affection;
+    // Health and well-being, pre-set basic stats
 
-    // Health and well-being, pre-set
-
-    @Column(name = "happiness")
-    private int happiness;
+    @Column(name = "health")
+    private int health;
 
     @Column(name = "hunger")
     private int hunger;
@@ -115,23 +109,33 @@ public class Cat {
     @Column(name = "thirst")
     private int thirst;
 
-    @Column(name = "health")
-    private int health;
-
     @Column(name = "energy")
     private int energy;
+
+    @Column(name = "happiness")
+    private int happiness;
 
     @Column(name = "cleanliness")
     private int cleanliness;
 
+    // Dates and timestamps
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
     // Constructors
 
     public Cat() {
-        this.age = calculateAge();
+        this.ageInDays = calculateAge();
         setBasicStats();
     }
 
-    // Methods
+    // Methods to pre-set stats
 
     public int calculateAge() {
         LocalDate currentDate = LocalDate.now();
@@ -143,13 +147,51 @@ public class Cat {
     }
 
     private void setBasicStats() {
-        this.happiness = 50;
+        this.health = 80;
         this.hunger = 50;
         this.thirst = 50;
-        this.health = 50;
-        this.energy = 50;
+        this.energy = 60;
+        this.happiness = 70;
         this.cleanliness = 50;
+        this.weight = 50;
     }
+
+    private void setPersonalityStats() {
+        Random random = new Random();
+        this.playfulness = random.nextInt(100);
+        this.affectionate = random.nextInt(100);
+        this.curiosity = random.nextInt(100);
+        this.independence = random.nextInt(100);
+        this.laziness = random.nextInt(100);
+        this.intelligence = random.nextInt(100);
+    }
+
+    // Methods for updates
+
+    public void updateCatAgeAndLifeStage() {
+        // TODO implement batch processing
+
+        // Calculate age based on createdAt date and current date
+        LocalDate createdAtDate = DateConverterUtil.dateToLocalDate(createdAt);
+        LocalDate currentDate = LocalDate.now();
+        long daysPassed = ChronoUnit.DAYS.between(createdAtDate, currentDate);
+
+        // Update age in years
+        this.ageInDays = (int) (daysPassed / 365);
+
+        // Update life stage based on age
+        if (ageInDays < 1) {
+            this.lifeStage = CatLifeStage.BABY;
+        } else if (ageInDays < 3) {
+            this.lifeStage = CatLifeStage.KITTEN;
+        } else if (ageInDays < 10) {
+            this.lifeStage = CatLifeStage.ADULT;
+        } else {
+            this.lifeStage = CatLifeStage.SENIOR;
+        }
+    }
+
+    // Methods to interact
 
     public int feedCat(int foodAmount) {
         hunger -= foodAmount;

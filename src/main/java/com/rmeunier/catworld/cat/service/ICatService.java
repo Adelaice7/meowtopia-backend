@@ -31,5 +31,5 @@ public interface ICatService {
 
     Page<CatDto> findByBreedId(UUID breedId, Integer page, Integer size, String orderBy, String direction);
 
-    void updateAllCatAges();
+    void updateAllCatAgesAndLifeStages();
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 public interface CatRepository extends JpaRepository<Cat, UUID> {
     List<Cat> findByBreedBreedId(UUID breedId);
     Page<Cat> findByBreedBreedId(UUID breedId, Pageable pageable);
-    List<Cat> findByBreedName(String breedName);
     List<Cat> findByUserAccountUserAccountId(UUID userAccountId);
     Page<Cat> findByUserAccountUserAccountId(UUID userAccountId, Pageable pageable);
 }

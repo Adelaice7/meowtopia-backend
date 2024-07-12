@@ -1,6 +1,5 @@
 package com.rmeunier.catworld.cat.model.dto;
 
-import com.rmeunier.catworld.cat.model.CatColor;
 import com.rmeunier.catworld.cat.model.Gender;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,9 +22,13 @@ public class CatDto {
     @NotNull(message = "Breed id is required")
     private UUID breedId;
 
-    @NotNull(message = "Color is required")
-    @NotEmpty(message = "Color cannot be empty")
-    private CatColor color;
+    @NotNull(message = "Fur color is required")
+    @NotEmpty(message = "Fur color cannot be empty")
+    private String color;
+
+    @NotNull(message = "Eye color is required")
+    @NotEmpty(message = "Eye color cannot be empty")
+    private String catEyeColor;
 
     private LocalDate birthDate;
 
@@ -43,7 +46,7 @@ public class CatDto {
     private int independence;
     private int stubbornness;
     private int playfulness;
-    private int affection;
+    private int affectionate;
     private int happiness;
     private int hunger;
     private int thirst;

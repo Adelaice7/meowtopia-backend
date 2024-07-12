@@ -31,13 +31,13 @@ public class Breed {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "fur_type")
-    private FurType furType;
+    private CatFurType furType;
 
     @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference("breed-cats")
     private Set<Cat> cats;
 
-    public Breed(String name, String description, int lifeSpan, FurType furType) {
+    public Breed(String name, String description, int lifeSpan, CatFurType furType) {
         this.name = name;
         this.description = description;
         this.lifeSpan = lifeSpan;

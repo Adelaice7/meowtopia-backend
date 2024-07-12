@@ -9,10 +9,12 @@ import com.rmeunier.catworld.cat.model.dto.CatDto;
 import com.rmeunier.catworld.cat.repository.CatRepository;
 import com.rmeunier.catworld.cat.exception.CatNotFoundException;
 import com.rmeunier.catworld.cat.model.Cat;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -80,7 +82,6 @@ public class CatServiceImpl implements ICatService {
     public CatDto createCat(UUID breedId, CatDto catDto) {
         Cat cat = CatMapper.INSTANCE.mapToEntity(catDto);
 
-        // TODO validation
         BreedDto breedDtoById = breedService.getBreedById(breedId);
         Breed breedById = BreedMapper.mapToEntity(breedDtoById);
 
@@ -93,7 +94,7 @@ public class CatServiceImpl implements ICatService {
         if (cat.getBirthDate() == null) {
             cat.setBirthDate(currentDate);
         } else {
-            cat.setAge(cat.calculateAge());
+            cat.setAgeInDays(cat.calculateAge());
         }
         Cat save = catRepository.save(cat);
         return CatMapper.INSTANCE.mapToDto(save);
@@ -118,24 +119,22 @@ public class CatServiceImpl implements ICatService {
 
         existingCat.setName(updatedCat.getName());
         existingCat.setBreed(updatedCat.getBreed());
-        existingCat.setColor(updatedCat.getColor());
+        existingCat.setFurColor(updatedCat.getFurColor());
+        existingCat.setEyeColor(updatedCat.getEyeColor());
 
         if (updatedCat.getBirthDate() != null && existingCat.getBirthDate() != updatedCat.getBirthDate()) {
             existingCat.setBirthDate(updatedCat.getBirthDate());
-            existingCat.setAge(updatedCat.calculateAge());
+            existingCat.setAgeInDays(updatedCat.calculateAge());
         }
         existingCat.setGender(updatedCat.getGender());
         existingCat.setWeight(updatedCat.getWeight());
         existingCat.setFixed(updatedCat.isFixed());
 
         existingCat.setIntelligence(updatedCat.getIntelligence());
-        existingCat.setSociability(updatedCat.getSociability());
-        existingCat.setActivity(updatedCat.getActivity());
         existingCat.setCuriosity(updatedCat.getCuriosity());
         existingCat.setIndependence(updatedCat.getIndependence());
-        existingCat.setStubbornness(updatedCat.getStubbornness());
         existingCat.setPlayfulness(updatedCat.getPlayfulness());
-        existingCat.setAffection(updatedCat.getAffection());
+        existingCat.setAffectionate(updatedCat.getAffectionate());
 
         existingCat.setHappiness(updatedCat.getHappiness());
         existingCat.setHunger(updatedCat.getHunger());
@@ -177,22 +176,14 @@ public class CatServiceImpl implements ICatService {
                 .map(CatMapper.INSTANCE::mapToDto);
     }
 
-    public List<CatDto> findByBreedName(String breedName) {
-        List<CatDto> cats = catRepository.findByBreedName(breedName)
-                .stream().map(CatMapper.INSTANCE::mapToDto)
-                .toList();
-        if (cats.isEmpty()) {
-            throw new CatNotFoundException();
-        }
-        return cats;
-    }
-
     @Override
-    public void updateAllCatAges() {
-        List<Cat> allCats = catRepository.findAll();
-        for (Cat cat : allCats) {
-            cat.setAge(cat.getAge() + 1);
+    @Transactional
+    @Async
+    public void updateAllCatAgesAndLifeStages() {
+        List<Cat> cats = catRepository.findAll();
+        cats.parallelStream().forEach(cat -> {
+            cat.updateCatAgeAndLifeStage();
             catRepository.save(cat);
-        }
+        });
     }
 }

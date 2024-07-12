@@ -1,6 +1,6 @@
 package com.rmeunier.catworld.cat.model;
 
-public enum FurType {
+public enum CatFurType {
     SHORT,
     MEDIUM,
     LONG,
