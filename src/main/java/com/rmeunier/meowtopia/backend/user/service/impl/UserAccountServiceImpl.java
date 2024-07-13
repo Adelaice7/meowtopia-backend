@@ -1,10 +1,11 @@
-package com.rmeunier.meowtopia.backend.user.service;
+package com.rmeunier.meowtopia.backend.user.service.impl;
 
 import com.rmeunier.meowtopia.backend.user.exception.UserAccountNotFoundException;
 import com.rmeunier.meowtopia.backend.user.mapper.UserAccountMapper;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
 import com.rmeunier.meowtopia.backend.user.model.dto.UserAccountDto;
-import com.rmeunier.meowtopia.backend.user.repo.UserAccountRepository;
+import com.rmeunier.meowtopia.backend.user.repo.IUserAccountRepository;
+import com.rmeunier.meowtopia.backend.user.service.IUserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,12 +19,12 @@ import java.util.UUID;
 @Service
 public class UserAccountServiceImpl implements IUserAccountService {
 
-    private final UserAccountRepository userAccountRepository;
+    private final IUserAccountRepository userAccountRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository,
+    public UserAccountServiceImpl(IUserAccountRepository userAccountRepository,
                                   PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;

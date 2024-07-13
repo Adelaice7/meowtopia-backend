@@ -1,8 +1,9 @@
-package com.rmeunier.meowtopia.backend.shop.service;
+package com.rmeunier.meowtopia.backend.shop.service.impl;
 
 import com.rmeunier.meowtopia.backend.shop.exception.TransactionNotFoundException;
 import com.rmeunier.meowtopia.backend.shop.model.Transaction;
-import com.rmeunier.meowtopia.backend.shop.repo.TransactionRepository;
+import com.rmeunier.meowtopia.backend.shop.repo.ITransactionRepository;
+import com.rmeunier.meowtopia.backend.shop.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +14,10 @@ import java.util.UUID;
 
 @Service
 public class TransactionServiceImpl implements ITransactionService {
-    private final TransactionRepository transactionRepository;
+    private final ITransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
+    public TransactionServiceImpl(ITransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 

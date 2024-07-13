@@ -1,9 +1,10 @@
-package com.rmeunier.meowtopia.backend.shop.repo;
+package com.rmeunier.meowtopia.backend.shop.service.impl;
 
 import com.rmeunier.meowtopia.backend.shop.exception.ShopItemNotFoundException;
 import com.rmeunier.meowtopia.backend.shop.model.shopitems.PetToy;
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
-import com.rmeunier.meowtopia.backend.shop.repo.shopitems.PetToyRepository;
+import com.rmeunier.meowtopia.backend.shop.repo.IShopItemRepository;
+import com.rmeunier.meowtopia.backend.shop.repo.shopitems.IPetToyRepository;
 import com.rmeunier.meowtopia.backend.shop.service.IShopItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,12 +17,12 @@ import java.util.UUID;
 @Service
 public class ShopItemServiceImpl implements IShopItemService {
 
-    private final ShopItemRepository shopItemRepository;
+    private final IShopItemRepository shopItemRepository;
 
-    private final PetToyRepository petToyRepository;
+    private final IPetToyRepository petToyRepository;
 
     @Autowired
-    public ShopItemServiceImpl(ShopItemRepository shopItemRepository, PetToyRepository petToyRepository) {
+    public ShopItemServiceImpl(IShopItemRepository shopItemRepository, IPetToyRepository petToyRepository) {
         this.shopItemRepository = shopItemRepository;
         this.petToyRepository = petToyRepository;
     }

@@ -1,7 +1,7 @@
 package com.rmeunier.meowtopia.backend.user.api;
 
 import com.rmeunier.meowtopia.backend.user.model.UserProfile;
-import com.rmeunier.meowtopia.backend.user.service.UserProfileService;
+import com.rmeunier.meowtopia.backend.user.service.IUserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/user/profiles")
 public class UserProfileApi {
-    private final UserProfileService userProfileService;
+    private final IUserProfileService userProfileService;
 
     @Autowired
-    public UserProfileApi(UserProfileService userProfileService) {
+    public UserProfileApi(IUserProfileService userProfileService) {
         this.userProfileService = userProfileService;
     }
 

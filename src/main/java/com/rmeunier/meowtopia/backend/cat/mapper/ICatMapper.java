@@ -8,9 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 
 @Mapper
-public interface CatMapper {
+public interface ICatMapper {
 
-    CatMapper INSTANCE = Mappers.getMapper(CatMapper.class);
+    ICatMapper INSTANCE = Mappers.getMapper(ICatMapper.class);
 
     @Mapping(target = "catId", source = "catId")
     Cat mapToEntity(CatDto catDto);

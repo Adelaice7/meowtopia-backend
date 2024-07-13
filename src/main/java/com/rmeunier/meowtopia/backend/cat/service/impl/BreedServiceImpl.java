@@ -1,10 +1,11 @@
-package com.rmeunier.meowtopia.backend.cat.service;
+package com.rmeunier.meowtopia.backend.cat.service.impl;
 
 import com.rmeunier.meowtopia.backend.cat.mapper.BreedMapper;
 import com.rmeunier.meowtopia.backend.cat.model.dto.BreedDto;
-import com.rmeunier.meowtopia.backend.cat.repository.BreedRepository;
+import com.rmeunier.meowtopia.backend.cat.repository.IBreedRepository;
 import com.rmeunier.meowtopia.backend.cat.exception.BreedNotFoundException;
 import com.rmeunier.meowtopia.backend.cat.model.Breed;
+import com.rmeunier.meowtopia.backend.cat.service.IBreedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +17,10 @@ import java.util.UUID;
 
 @Service
 public class BreedServiceImpl implements IBreedService {
-    private final BreedRepository breedRepository;
+    private final IBreedRepository breedRepository;
 
     @Autowired
-    public BreedServiceImpl(BreedRepository breedRepository) {
+    public BreedServiceImpl(IBreedRepository breedRepository) {
         this.breedRepository = breedRepository;
     }
 

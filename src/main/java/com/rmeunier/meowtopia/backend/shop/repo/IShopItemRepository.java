@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ShopItemRepository extends JpaRepository<ShopItem, UUID> {
+public interface IShopItemRepository extends JpaRepository<ShopItem, UUID> {
 
 }

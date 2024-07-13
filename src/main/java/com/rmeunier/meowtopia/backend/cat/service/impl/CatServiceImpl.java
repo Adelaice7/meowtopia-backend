@@ -1,14 +1,16 @@
-package com.rmeunier.meowtopia.backend.cat.service;
+package com.rmeunier.meowtopia.backend.cat.service.impl;
 
 import com.rmeunier.meowtopia.backend.cat.exception.BreedNotFoundException;
 import com.rmeunier.meowtopia.backend.cat.mapper.BreedMapper;
-import com.rmeunier.meowtopia.backend.cat.mapper.CatMapper;
+import com.rmeunier.meowtopia.backend.cat.mapper.ICatMapper;
 import com.rmeunier.meowtopia.backend.cat.model.Breed;
 import com.rmeunier.meowtopia.backend.cat.model.dto.BreedDto;
 import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
-import com.rmeunier.meowtopia.backend.cat.repository.CatRepository;
+import com.rmeunier.meowtopia.backend.cat.repository.ICatRepository;
 import com.rmeunier.meowtopia.backend.cat.exception.CatNotFoundException;
 import com.rmeunier.meowtopia.backend.cat.model.Cat;
+import com.rmeunier.meowtopia.backend.cat.service.IBreedService;
+import com.rmeunier.meowtopia.backend.cat.service.ICatService;
 import com.rmeunier.meowtopia.backend.cat.utils.DateConverterUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,12 @@ import java.util.UUID;
 
 @Service
 public class CatServiceImpl implements ICatService {
-    private final CatRepository catRepository;
+    private final ICatRepository catRepository;
 
     private final IBreedService breedService;
 
     @Autowired
-    public CatServiceImpl(CatRepository catRepository, IBreedService breedService) {
+    public CatServiceImpl(ICatRepository catRepository, IBreedService breedService) {
         this.catRepository = catRepository;
         this.breedService = breedService;
     }
@@ -39,7 +41,7 @@ public class CatServiceImpl implements ICatService {
         Cat cat = catRepository.findById(catId)
                 .orElseThrow(() -> new CatNotFoundException(catId));
         if (cat != null) {
-            return CatMapper.INSTANCE.mapToDto(cat);
+            return ICatMapper.INSTANCE.mapToDto(cat);
         }
         return null;
     }
@@ -47,7 +49,7 @@ public class CatServiceImpl implements ICatService {
     @Override
     public List<CatDto> getAllCats() {
         return catRepository.findAll()
-                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .stream().map(ICatMapper.INSTANCE::mapToDto)
                 .toList();
     }
 
@@ -55,13 +57,13 @@ public class CatServiceImpl implements ICatService {
     public Page<CatDto> getAllCats(Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return catRepository.findAll(pageRequest)
-                .map(CatMapper.INSTANCE::mapToDto);
+                .map(ICatMapper.INSTANCE::mapToDto);
     }
 
     @Override
     public List<CatDto> getAllCatsByUserAccountId(UUID userAccountId) {
         return catRepository.findByUserAccountUserAccountId(userAccountId)
-                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .stream().map(ICatMapper.INSTANCE::mapToDto)
                 .toList();
     }
 
@@ -69,19 +71,19 @@ public class CatServiceImpl implements ICatService {
     public Page<CatDto> getAllCatsFiltered(Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return catRepository.findAll(pageRequest)
-                .map(CatMapper.INSTANCE::mapToDto);
+                .map(ICatMapper.INSTANCE::mapToDto);
     }
 
     @Override
     public Page<CatDto> getAllCatsByUserAccountIdFiltered(UUID userAccountId, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return catRepository.findByUserAccountUserAccountId(userAccountId, pageRequest)
-                .map(CatMapper.INSTANCE::mapToDto);
+                .map(ICatMapper.INSTANCE::mapToDto);
     }
 
     @Override
     public CatDto createCat(UUID breedId, CatDto catDto) {
-        Cat cat = CatMapper.INSTANCE.mapToEntity(catDto);
+        Cat cat = ICatMapper.INSTANCE.mapToEntity(catDto);
 
         BreedDto breedDtoById = breedService.getBreedById(breedId);
         Breed breedById = BreedMapper.mapToEntity(breedDtoById);
@@ -98,19 +100,19 @@ public class CatServiceImpl implements ICatService {
             cat.setAgeInDays(cat.calculateAge());
         }
         Cat save = catRepository.save(cat);
-        return CatMapper.INSTANCE.mapToDto(save);
+        return ICatMapper.INSTANCE.mapToDto(save);
     }
 
     @Override
     public CatDto createCat(CatDto catDto) {
-        Cat cat = CatMapper.INSTANCE.mapToEntity(catDto);
+        Cat cat = ICatMapper.INSTANCE.mapToEntity(catDto);
         cat = catRepository.save(cat);
-        return CatMapper.INSTANCE.mapToDto(cat);
+        return ICatMapper.INSTANCE.mapToDto(cat);
     }
 
     @Override
     public CatDto updateCat(UUID catId, CatDto updatedCatDto) {
-        Cat updatedCat = CatMapper.INSTANCE.mapToEntity(updatedCatDto);
+        Cat updatedCat = ICatMapper.INSTANCE.mapToEntity(updatedCatDto);
         Cat existingCat = catRepository.findById(catId)
                 .orElseThrow(() -> new CatNotFoundException(catId));
 
@@ -147,7 +149,7 @@ public class CatServiceImpl implements ICatService {
         existingCat.setCleanliness(updatedCat.getCleanliness());
 
         Cat save = catRepository.save(existingCat);
-        return CatMapper.INSTANCE.mapToDto(save);
+        return ICatMapper.INSTANCE.mapToDto(save);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class CatServiceImpl implements ICatService {
     @Override
     public List<CatDto> findByBreedId(UUID breedId) {
         List<CatDto> cats = catRepository.findByBreedBreedId(breedId)
-                .stream().map(CatMapper.INSTANCE::mapToDto)
+                .stream().map(ICatMapper.INSTANCE::mapToDto)
                 .toList();
         if (cats.isEmpty()) {
             throw new CatNotFoundException();
@@ -176,7 +178,7 @@ public class CatServiceImpl implements ICatService {
     public Page<CatDto> findByBreedId(UUID breedId, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return catRepository.findByBreedBreedId(breedId, pageRequest)
-                .map(CatMapper.INSTANCE::mapToDto);
+                .map(ICatMapper.INSTANCE::mapToDto);
     }
 
     @Override

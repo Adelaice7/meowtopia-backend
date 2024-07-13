@@ -1,7 +1,8 @@
-package com.rmeunier.meowtopia.backend.shop.service;
+package com.rmeunier.meowtopia.backend.shop.service.impl;
 
 import com.rmeunier.meowtopia.backend.shop.exception.ProductNotFoundException;
 import com.rmeunier.meowtopia.backend.shop.model.Product;
+import com.rmeunier.meowtopia.backend.shop.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public abstract class ProductService<T extends Product> implements IProductService<T> {
+public abstract class ProductServiceImpl<T extends Product> implements IProductService<T> {
 
     private final JpaRepository<T, UUID> productRepository;
 
     @Autowired
-    public ProductService(JpaRepository<T, UUID> productRepository) {
+    public ProductServiceImpl(JpaRepository<T, UUID> productRepository) {
         this.productRepository = productRepository;
     }
 

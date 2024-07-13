@@ -4,7 +4,7 @@ import com.rmeunier.meowtopia.backend.user.model.UserProfile;
 
 import java.util.UUID;
 
-public interface UserProfileService {
+public interface IUserProfileService {
 
     UserProfile getUserProfileById(UUID userProfileId);
 

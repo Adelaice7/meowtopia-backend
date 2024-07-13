@@ -1,8 +1,8 @@
-package com.rmeunier.meowtopia.backend.user.service;
+package com.rmeunier.meowtopia.backend.user.service.impl;
 
 import com.rmeunier.meowtopia.backend.user.mapper.UserAccountMapper;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
-import com.rmeunier.meowtopia.backend.user.repo.UserAccountRepository;
+import com.rmeunier.meowtopia.backend.user.repo.IUserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserAccountRepository userAccountRepository;
+    private final IUserAccountRepository userAccountRepository;
 
     @Autowired
-    public CustomUserDetailsService(UserAccountRepository userAccountRepository) {
+    public CustomUserDetailsService(IUserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
     }
 

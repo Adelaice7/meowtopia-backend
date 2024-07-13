@@ -1,6 +1,6 @@
 package com.rmeunier.meowtopia.backend.config;
 
-import com.rmeunier.meowtopia.backend.user.service.CustomUserDetailsService;
+import com.rmeunier.meowtopia.backend.user.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,8 +1,10 @@
-package com.rmeunier.meowtopia.backend.user.service;
+package com.rmeunier.meowtopia.backend.user.service.impl;
 
+import com.rmeunier.meowtopia.backend.shop.model.Product;
 import com.rmeunier.meowtopia.backend.user.exception.UserInventoryItemNotFoundException;
 import com.rmeunier.meowtopia.backend.user.model.UserInventoryItem;
-import com.rmeunier.meowtopia.backend.user.repo.UserInventoryItemRepository;
+import com.rmeunier.meowtopia.backend.user.repo.IUserInventoryItemRepository;
+import com.rmeunier.meowtopia.backend.user.service.IUserInventoryItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,12 +14,17 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UserInventoryItemService implements IUserInventoryItemService {
-    private UserInventoryItemRepository userInventoryItemRepository;
+public class UserInventoryItemServiceImpl implements IUserInventoryItemService {
+    private IUserInventoryItemRepository userInventoryItemRepository;
 
     @Autowired
-    public UserInventoryItemService(UserInventoryItemRepository userInventoryItemRepository) {
+    public UserInventoryItemServiceImpl(IUserInventoryItemRepository userInventoryItemRepository) {
         this.userInventoryItemRepository = userInventoryItemRepository;
+    }
+
+    public void buyProduct(UUID userAccountId, Product product, int quantity) {
+        // Add logic to handle inventory
+        // Example: save new inventory item or update existing inventory
     }
 
     @Override

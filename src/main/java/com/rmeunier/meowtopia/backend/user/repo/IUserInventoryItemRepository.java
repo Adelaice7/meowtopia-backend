@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface UserInventoryItemRepository extends JpaRepository<UserInventoryItem, UUID> {
+public interface IUserInventoryItemRepository extends JpaRepository<UserInventoryItem, UUID> {
     Page<UserInventoryItem> findByUserAccountUserAccountId(UUID userAccountId, org.springframework.data.domain.Pageable pageable);
 }

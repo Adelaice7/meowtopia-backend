@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface CatRepository extends JpaRepository<Cat, UUID> {
+public interface ICatRepository extends JpaRepository<Cat, UUID> {
     List<Cat> findByBreedBreedId(UUID breedId);
     Page<Cat> findByBreedBreedId(UUID breedId, Pageable pageable);
     List<Cat> findByUserAccountUserAccountId(UUID userAccountId);
