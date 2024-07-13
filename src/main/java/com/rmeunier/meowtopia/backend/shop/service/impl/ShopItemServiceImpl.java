@@ -1,10 +1,8 @@
 package com.rmeunier.meowtopia.backend.shop.service.impl;
 
 import com.rmeunier.meowtopia.backend.shop.exception.ShopItemNotFoundException;
-import com.rmeunier.meowtopia.backend.shop.model.shopitems.PetToy;
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
 import com.rmeunier.meowtopia.backend.shop.repo.IShopItemRepository;
-import com.rmeunier.meowtopia.backend.shop.repo.shopitems.IPetToyRepository;
 import com.rmeunier.meowtopia.backend.shop.service.IShopItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,12 +17,9 @@ public class ShopItemServiceImpl implements IShopItemService {
 
     private final IShopItemRepository shopItemRepository;
 
-    private final IPetToyRepository petToyRepository;
-
     @Autowired
-    public ShopItemServiceImpl(IShopItemRepository shopItemRepository, IPetToyRepository petToyRepository) {
+    public ShopItemServiceImpl(IShopItemRepository shopItemRepository) {
         this.shopItemRepository = shopItemRepository;
-        this.petToyRepository = petToyRepository;
     }
 
     @Override
@@ -44,29 +39,17 @@ public class ShopItemServiceImpl implements IShopItemService {
     }
 
     @Override
+    public ShopItem updateShopItem(UUID shopItemId, ShopItem shopItem) {
+        if (shopItemRepository.existsById(shopItemId)) {
+            return shopItemRepository.save(shopItem);
+        }
+        return null;
+    }
+
+    @Override
     public boolean deleteShopItem(UUID itemId) {
         if (shopItemRepository.existsById(itemId)) {
             shopItemRepository.deleteById(itemId);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public PetToy getPetToyById(UUID petToyId) {
-        return petToyRepository.findById(petToyId)
-                .orElseThrow(() -> new ShopItemNotFoundException(petToyId));
-    }
-
-    @Override
-    public PetToy createPetToy(PetToy petToy) {
-        return petToyRepository.save(petToy);
-    }
-
-    @Override
-    public boolean deletePetToy(UUID petToyId) {
-        if (petToyRepository.existsById(petToyId)) {
-            petToyRepository.deleteById(petToyId);
             return true;
         }
         return false;

@@ -2,9 +2,6 @@ package com.rmeunier.meowtopia.backend.shop.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.BindParam;
-
-import java.util.UUID;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -12,8 +9,12 @@ import java.util.UUID;
 @Table(name = "shop_items")
 public class ShopItem extends Product {
 
+    @Column(name = "stock")
+    private int stock;
+
     // Constructors
-    public ShopItem(String name, Double price) {
+    public ShopItem(String name, Double price, int stock) {
         super(name, price);
+        this.stock = stock;
     }
 }

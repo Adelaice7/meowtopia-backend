@@ -1,8 +1,11 @@
 package com.rmeunier.meowtopia.backend.user.api;
 
+import com.rmeunier.meowtopia.backend.cat.model.Cat;
 import com.rmeunier.meowtopia.backend.other.GenericResponse;
+import com.rmeunier.meowtopia.backend.user.model.UserInventoryItem;
 import com.rmeunier.meowtopia.backend.user.model.dto.UserAccountDto;
 import com.rmeunier.meowtopia.backend.user.service.IUserAccountService;
+import com.rmeunier.meowtopia.backend.user.service.IUserInventoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,9 +25,12 @@ import java.util.UUID;
 public class UserAccountApi {
     private final IUserAccountService userAccountService;
 
+    private final IUserInventoryService userInventoryService;
+
     @Autowired
-    public UserAccountApi(IUserAccountService userAccountService) {
+    public UserAccountApi(IUserAccountService userAccountService, IUserInventoryService userInventoryService) {
         this.userAccountService = userAccountService;
+        this.userInventoryService = userInventoryService;
     }
 
     @GetMapping
@@ -37,6 +44,17 @@ public class UserAccountApi {
     @GetMapping("/{userAccountId}")
     public ResponseEntity<UserAccountDto> getUserAccountById(@PathVariable("userAccountId") UUID userAccountId) {
         return ResponseEntity.ok(userAccountService.getUserAccountById(userAccountId));
+    }
+
+    @GetMapping("{userAccountId}/cats")
+    public ResponseEntity<List<Cat>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
+        return ResponseEntity.ok(userAccountService.getAllCatsByUserAccountId(userAccountId));
+    }
+
+
+    @GetMapping("/{userAccountId}/inventory")
+    public ResponseEntity<List<UserInventoryItem>> getAllInventoryItems(UUID inventoryItemId) {
+        return ResponseEntity.ok(userInventoryService.getInventoryItemsByUser(inventoryItemId));
     }
 
     @PostMapping

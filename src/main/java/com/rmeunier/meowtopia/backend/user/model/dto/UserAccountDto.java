@@ -30,4 +30,6 @@ public class UserAccountDto {
     private String password;
 
     private String passwordConfirmation;
+
+    private String role;
 }

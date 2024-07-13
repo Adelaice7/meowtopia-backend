@@ -1,6 +1,5 @@
 package com.rmeunier.meowtopia.backend.shop.service;
 
-import com.rmeunier.meowtopia.backend.shop.model.shopitems.PetToy;
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
 import org.springframework.data.domain.Page;
 
@@ -13,13 +12,8 @@ public interface IShopItemService {
 
     ShopItem createShopItem(ShopItem shopItem);
 
+    ShopItem updateShopItem(UUID shopItemId, ShopItem shopItem);
+
     boolean deleteShopItem(UUID itemId);
-
-    // Specific methods for PetToy
-    PetToy getPetToyById(UUID petToyId);
-
-    PetToy createPetToy(PetToy petToy);
-
-    boolean deletePetToy(UUID petToyId);
 
 }

@@ -2,7 +2,6 @@ package com.rmeunier.meowtopia.backend.shop.model;
 
 import com.rmeunier.meowtopia.backend.user.model.UserInventoryItem;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

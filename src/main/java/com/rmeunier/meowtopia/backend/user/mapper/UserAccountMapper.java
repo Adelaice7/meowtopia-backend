@@ -1,6 +1,7 @@
 package com.rmeunier.meowtopia.backend.user.mapper;
 
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
+import com.rmeunier.meowtopia.backend.user.model.UserRole;
 import com.rmeunier.meowtopia.backend.user.model.dto.UserAccountDto;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ public class UserAccountMapper {
                 .email(userAccount.getEmail())
                 .password(userAccount.getPasswordHash())
                 .username(userAccount.getUsername())
+                .role(userAccount.getRole().toString())
                 .build();
     }
 
@@ -20,6 +22,7 @@ public class UserAccountMapper {
                 .email(userAccountDto.getEmail())
                 .passwordHash(userAccountDto.getPassword())
                 .username(userAccountDto.getUsername())
+                .role(UserRole.valueOf(userAccountDto.getRole()))
                 .build();
     }
 
