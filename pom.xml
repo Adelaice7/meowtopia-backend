@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.rmeunier</groupId>
-    <artifactId>catworld</artifactId>
+    <artifactId>meowtopia</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>catworld</name>
-    <description>catworld</description>
+    <name>meowtopia-backend</name>
+    <description>meowtopia</description>
     <url/>
     <licenses>
         <license/>
@@ -87,6 +87,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.1.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.5.2.Final</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.passay</groupId>
