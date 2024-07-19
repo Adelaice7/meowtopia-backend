@@ -1,6 +1,7 @@
 package com.rmeunier.meowtopia.backend.user.service;
 
 import com.rmeunier.meowtopia.backend.cat.model.Cat;
+import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
 import com.rmeunier.meowtopia.backend.user.model.dto.UserAccountDto;
 import org.springframework.data.domain.Page;
 
@@ -15,7 +16,7 @@ public interface IUserAccountService {
 
     UserAccountDto getUserAccountById(UUID userAccountId);
 
-    List<Cat> getAllCatsByUserAccountId(UUID userAccountId);
+    List<CatDto> getAllCatsByUserAccountId(UUID userAccountId);
 
     UserAccountDto getUserAccountByUsername(String username);
 

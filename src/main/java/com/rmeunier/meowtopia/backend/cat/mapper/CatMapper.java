@@ -8,6 +8,7 @@ public class CatMapper {
     public static CatDto mapToDto(Cat cat) {
         return CatDto.builder()
                 .name(cat.getName())
+                .breedName(cat.getBreed().getName())
                 .furColor(cat.getFurColor())
                 .eyeColor(cat.getEyeColor())
                 .gender(cat.getGender())

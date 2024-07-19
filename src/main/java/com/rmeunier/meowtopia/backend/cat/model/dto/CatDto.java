@@ -20,6 +20,8 @@ public class CatDto {
     @NotEmpty(message = "Name is required")
     private String name;
 
+    private String breedName;
+
     @NotNull(message = "Fur color is required")
     @NotEmpty(message = "Fur color cannot be empty")
     private String furColor;

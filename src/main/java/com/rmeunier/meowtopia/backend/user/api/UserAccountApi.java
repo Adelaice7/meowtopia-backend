@@ -54,7 +54,7 @@ public class UserAccountApi {
     }
 
     @GetMapping("{userAccountId}/cats")
-    public ResponseEntity<List<Cat>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
+    public ResponseEntity<List<CatDto>> getAllCatsByUserAccountId(@PathVariable("userAccountId") UUID userAccountId) {
         return ResponseEntity.ok(userAccountService.getAllCatsByUserAccountId(userAccountId));
     }
 
