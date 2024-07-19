@@ -1,6 +1,8 @@
 package com.rmeunier.meowtopia.backend.user.api;
 
 import com.rmeunier.meowtopia.backend.cat.model.Cat;
+import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
+import com.rmeunier.meowtopia.backend.cat.service.ICatService;
 import com.rmeunier.meowtopia.backend.other.GenericResponse;
 import com.rmeunier.meowtopia.backend.user.model.UserInventoryItem;
 import com.rmeunier.meowtopia.backend.user.model.dto.UserAccountDto;
@@ -20,17 +22,22 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @Validated
 public class UserAccountApi {
     private final IUserAccountService userAccountService;
 
     private final IUserInventoryService userInventoryService;
 
+    private final ICatService catService;
+
     @Autowired
-    public UserAccountApi(IUserAccountService userAccountService, IUserInventoryService userInventoryService) {
+    public UserAccountApi(IUserAccountService userAccountService,
+                          IUserInventoryService userInventoryService,
+                          ICatService catService) {
         this.userAccountService = userAccountService;
         this.userInventoryService = userInventoryService;
+        this.catService = catService;
     }
 
     @GetMapping
@@ -62,7 +69,17 @@ public class UserAccountApi {
         return ResponseEntity.ok(userAccountService.createUserAccount(userAccountDto));
     }
 
-    @PatchMapping("/{userAccountId}")
+    @PostMapping("{userAccountId}/cats")
+    public ResponseEntity<CatDto> createCatForUserAccount(
+            @PathVariable("userAccountId") String userAccountIdString,
+            @RequestParam("breedId") String breedIdString,
+            @Valid @RequestBody CatDto catDto) {
+        UUID userAccountId = UUID.fromString(userAccountIdString);
+        UUID breedId = UUID.fromString(breedIdString);
+        return ResponseEntity.ok(catService.createCat(userAccountId, breedId, catDto));
+    }
+
+    @PutMapping("/{userAccountId}")
     public ResponseEntity<UserAccountDto> updateUserAccount(@PathVariable("userAccountId") UUID userAccountId, @Valid  UserAccountDto userAccountDto) {
         return ResponseEntity.ok(userAccountService.updateUserAccount(userAccountId, userAccountDto));
     }

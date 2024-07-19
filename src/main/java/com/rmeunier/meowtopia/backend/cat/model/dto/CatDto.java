@@ -1,5 +1,6 @@
 package com.rmeunier.meowtopia.backend.cat.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rmeunier.meowtopia.backend.cat.model.Gender;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,34 +20,27 @@ public class CatDto {
     @NotEmpty(message = "Name is required")
     private String name;
 
-    @NotNull(message = "Breed id is required")
-    private UUID breedId;
-
     @NotNull(message = "Fur color is required")
     @NotEmpty(message = "Fur color cannot be empty")
-    private String color;
+    private String furColor;
 
     @NotNull(message = "Eye color is required")
     @NotEmpty(message = "Eye color cannot be empty")
-    private String catEyeColor;
-
-    private LocalDate birthDate;
+    private String eyeColor;
 
     @NotNull(message = "Gender is required")
-    @NotEmpty(message = "Gender cannot be empty")
     private Gender gender;
 
     private int weight;
     private boolean isFixed;
 
     private int intelligence;
-    private int sociability;
-    private int activity;
     private int curiosity;
     private int independence;
-    private int stubbornness;
     private int playfulness;
     private int affectionate;
+    private int laziness;
+
     private int happiness;
     private int hunger;
     private int thirst;

@@ -21,7 +21,7 @@ public interface ICatService {
 
     CatDto createCat(UUID breedId, CatDto catDto);
 
-    CatDto createCat(CatDto catDto);
+    CatDto createCat(UUID userAccountId, UUID breedId, CatDto catDto);
 
     CatDto updateCat(UUID catId, CatDto updatedCatDto);
 

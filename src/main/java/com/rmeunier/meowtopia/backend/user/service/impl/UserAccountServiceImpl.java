@@ -1,5 +1,6 @@
 package com.rmeunier.meowtopia.backend.user.service.impl;
 
+import com.rmeunier.meowtopia.backend.cat.model.Cat;
 import com.rmeunier.meowtopia.backend.user.exception.UserAccountNotFoundException;
 import com.rmeunier.meowtopia.backend.user.mapper.UserAccountMapper;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
@@ -48,6 +49,13 @@ public class UserAccountServiceImpl implements IUserAccountService {
         UserAccount userAccount = userAccountRepository.findById(userAccountId)
                 .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
         return UserAccountMapper.mapToDto(userAccount);
+    }
+
+    @Override
+    public List<Cat> getAllCatsByUserAccountId(UUID userAccountId) {
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                .orElseThrow(() -> new UserAccountNotFoundException(userAccountId));
+        return userAccount.getCats().stream().toList();
     }
 
     @Override

@@ -24,8 +24,8 @@ import java.util.UUID;
 public class Cat {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @NonNull
-    @NotNull
+//    @NonNull
+//    @NotNull
     @Column(name = "cat_id")
     private UUID catId;
 
@@ -68,7 +68,6 @@ public class Cat {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Gender is required")
-    @NotEmpty(message = "Gender cannot be empty")
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
