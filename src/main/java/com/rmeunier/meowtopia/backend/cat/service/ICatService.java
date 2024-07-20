@@ -23,6 +23,8 @@ public interface ICatService {
 
     CatDto createCat(UUID userAccountId, UUID breedId, CatDto catDto);
 
+    CatDto feedCat(UUID catId, UUID foodId);
+
     CatDto updateCat(UUID catId, CatDto updatedCatDto);
 
     boolean deleteCat(UUID catId);

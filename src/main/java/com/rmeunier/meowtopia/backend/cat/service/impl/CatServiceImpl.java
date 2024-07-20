@@ -2,18 +2,18 @@ package com.rmeunier.meowtopia.backend.cat.service.impl;
 
 import com.rmeunier.meowtopia.backend.cat.exception.BreedNotFoundException;
 import com.rmeunier.meowtopia.backend.cat.exception.CatNotCreatedException;
-import com.rmeunier.meowtopia.backend.cat.mapper.BreedMapper;
 import com.rmeunier.meowtopia.backend.cat.mapper.CatMapper;
 import com.rmeunier.meowtopia.backend.cat.model.Breed;
-import com.rmeunier.meowtopia.backend.cat.model.dto.BreedDto;
 import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
 import com.rmeunier.meowtopia.backend.cat.repository.IBreedRepository;
 import com.rmeunier.meowtopia.backend.cat.repository.ICatRepository;
 import com.rmeunier.meowtopia.backend.cat.exception.CatNotFoundException;
 import com.rmeunier.meowtopia.backend.cat.model.Cat;
-import com.rmeunier.meowtopia.backend.cat.service.IBreedService;
 import com.rmeunier.meowtopia.backend.cat.service.ICatService;
 import com.rmeunier.meowtopia.backend.cat.utils.DateConverterUtil;
+import com.rmeunier.meowtopia.backend.shop.exception.ProductNotFoundException;
+import com.rmeunier.meowtopia.backend.shop.model.shopitems.Food;
+import com.rmeunier.meowtopia.backend.shop.repo.shopitems.IFoodRepository;
 import com.rmeunier.meowtopia.backend.user.exception.UserAccountNotFoundException;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
 import com.rmeunier.meowtopia.backend.user.repo.IUserAccountRepository;
@@ -37,13 +37,17 @@ public class CatServiceImpl implements ICatService {
 
     private final IUserAccountRepository userAccountRepository;
 
+    private final IFoodRepository foodRepository;
+
     @Autowired
     public CatServiceImpl(ICatRepository catRepository,
                           IBreedRepository breedRepository,
-                          IUserAccountRepository userAccountRepository) {
+                          IUserAccountRepository userAccountRepository,
+                          IFoodRepository foodRepository) {
         this.catRepository = catRepository;
         this.breedRepository = breedRepository;
         this.userAccountRepository = userAccountRepository;
+        this.foodRepository = foodRepository;
     }
 
     @Override
@@ -126,13 +130,32 @@ public class CatServiceImpl implements ICatService {
         Cat cat = CatMapper.mapToEntity(catDto);
         cat.setUserAccount(userAccount);
         cat.setBreed(breed);
+        cat.setBasicStats();
 
         cat = setNewCatAgeAndLifeStage(cat);
         Cat save = catRepository.save(cat);
-        return CatMapper.mapToDto(save);
 
+        return CatMapper.mapToDto(save);
     }
 
+    @Transactional
+    @Override
+    public CatDto feedCat(UUID catId, UUID foodId) {
+        Cat cat = catRepository.findById(catId)
+                .orElseThrow(() -> new CatNotFoundException(catId));
+
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new ProductNotFoundException(foodId));
+
+        if (food != null) {
+            cat.feed(food);
+            cat = catRepository.save(cat);
+        }
+
+        return CatMapper.mapToDto(cat);
+    }
+
+        @Transactional
     @Override
     public CatDto updateCat(UUID catId, CatDto updatedCatDto) {
         Cat updatedCat = CatMapper.mapToEntity(updatedCatDto);

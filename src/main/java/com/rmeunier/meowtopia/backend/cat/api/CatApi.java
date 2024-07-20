@@ -50,6 +50,16 @@ public class CatApi {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCat);
     }
 
+    @PutMapping("/{catId}/feed")
+    public ResponseEntity<CatDto> feedCat(@PathVariable("catId") UUID catId,
+                                          @RequestParam("foodId") UUID foodId) {
+        CatDto fedCat = catService.feedCat(catId, foodId);
+        if (fedCat != null) {
+            return ResponseEntity.ok(fedCat);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{catId}")
     public ResponseEntity<CatDto> updateCat(@PathVariable("catId") UUID catId, @Valid @RequestBody CatDto updateCat) {
         CatDto updatedCat = catService.updateCat(catId, updateCat);

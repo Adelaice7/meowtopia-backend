@@ -3,6 +3,7 @@ package com.rmeunier.meowtopia.backend.cat.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rmeunier.meowtopia.backend.cat.utils.DateConverterUtil;
+import com.rmeunier.meowtopia.backend.shop.model.shopitems.Food;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -143,7 +144,7 @@ public class Cat {
         }
     }
 
-    private void setBasicStats() {
+    public void setBasicStats() {
         this.ageInDays = calculateAge();
 
         this.health = 80;
@@ -194,15 +195,29 @@ public class Cat {
 
     // Methods to interact
 
-    public int feedCat(int foodAmount) {
-        hunger -= foodAmount;
-        if (hunger < 0) {
-            hunger = 0;
+    public void feed(Food food) {
+        this.hunger += food.getEffectHunger();
+        if (this.hunger > 100) {
+            this.hunger = 100;
         }
-        return hunger;
+
+        this.energy += food.getEffectEnergy();
+        if (this.energy > 100) {
+            this.energy = 100;
+        }
+
+        this.happiness += food.getEffectHappiness();
+        if (this.happiness > 100) {
+            this.happiness = 100;
+        }
+
+        this.health += food.getEffectHealth();
+        if (this.health > 100) {
+            this.health = 100;
+        }
     }
 
-    public int waterCat(int drinkAmount) {
+    public int water(int drinkAmount) {
         thirst -= drinkAmount;
         if (thirst < 0) {
             thirst = 0;
@@ -211,10 +226,13 @@ public class Cat {
     }
 
     // TODO: Implement playWithCat method
-    public void playWithCat() {
+    public void playWith() {
         // Energy should lower
         // Happiness should increase
         // Cleanliness decreases depending on toy
+    }
 
+    public void clean() {
+        cleanliness = 100;
     }
 }

@@ -12,7 +12,26 @@ import lombok.Setter;
 @Entity
 @Table(name = "food")
 public class Food extends ShopItem {
+    int effectHunger;
+    int effectHappiness;
+    int effectHealth;
+    int effectEnergy;
+
     public Food(String name, Double price, int stock) {
         super(name, price, stock);
+    }
+
+    public Food(String name,
+                Double price,
+                int stock,
+                int effectHunger,
+                int effectHappiness,
+                int effectHealth,
+                int effectEnergy) {
+        super(name, price, stock);
+        this.effectHunger = effectHunger;
+        this.effectHappiness = effectHappiness;
+        this.effectHealth = effectHealth;
+        this.effectEnergy = effectEnergy;
     }
 }
