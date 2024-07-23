@@ -7,6 +7,7 @@ public class BreedMapper {
 
     public static BreedDto mapToDto(Breed breed) {
         return BreedDto.builder()
+                .breedId(breed.getBreedId())
                 .name(breed.getName())
                 .description(breed.getDescription())
                 .lifeSpan(breed.getLifeSpan())

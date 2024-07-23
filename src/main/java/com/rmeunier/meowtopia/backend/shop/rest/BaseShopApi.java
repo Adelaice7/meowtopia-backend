@@ -2,6 +2,7 @@ package com.rmeunier.meowtopia.backend.shop.rest;
 
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
 import com.rmeunier.meowtopia.backend.shop.service.IShopItemService;
+import com.rmeunier.meowtopia.backend.user.service.IUserInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,36 @@ public abstract class BaseShopApi<T extends ShopItem> {
 
     protected IShopItemService<T> shopItemService;
 
+    protected IUserInventoryService userInventoryService;
+
     @Autowired
-    public BaseShopApi(IShopItemService<T> shopItemService) {
+    public BaseShopApi(IShopItemService<T> shopItemService, IUserInventoryService userInventoryService) {
         this.shopItemService = shopItemService;
+        this.userInventoryService = userInventoryService;
+    }
+
+    @PostMapping("/buy/{itemId}")
+    public ResponseEntity<String> buyProduct(@PathVariable UUID itemId,
+                                             @RequestParam("quantity") int quantity,
+                                             @RequestParam("userId") UUID userId) {
+        // Fetch the item from the appropriate service
+        ShopItem shopItem = shopItemService.getShopItemById(itemId);
+        if (shopItem == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Check if there's enough stock
+        if (shopItem.getStock() < quantity) {
+            return ResponseEntity.badRequest().body("Insufficient stock");
+        }
+
+        // Update stock in the shop
+        shopItemService.updateStock(itemId, -quantity);
+
+        // Add item to the user's inventory
+        userInventoryService.addProductToInventory(userId, itemId, quantity);
+
+        return ResponseEntity.ok("Product purchased successfully");
     }
 
     @GetMapping
