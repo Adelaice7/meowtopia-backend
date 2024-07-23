@@ -1,7 +1,6 @@
 package com.rmeunier.meowtopia.backend.user.service.impl;
 
 import com.rmeunier.meowtopia.backend.cat.mapper.CatMapper;
-import com.rmeunier.meowtopia.backend.cat.model.Cat;
 import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
 import com.rmeunier.meowtopia.backend.user.exception.UserAccountNotFoundException;
 import com.rmeunier.meowtopia.backend.user.mapper.UserAccountMapper;
@@ -13,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,15 @@ public class UserAccountServiceImpl implements IUserAccountService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthenticationManager authenticationManager;
+
     @Autowired
     public UserAccountServiceImpl(IUserAccountRepository userAccountRepository,
-                                  PasswordEncoder passwordEncoder) {
+                                  PasswordEncoder passwordEncoder,
+                                  AuthenticationManager authenticationManager) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -103,5 +108,16 @@ public class UserAccountServiceImpl implements IUserAccountService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public UserAccountDto login(UserAccountDto userAccountDto) {
+        if (userAccountDto == null) {
+            throw new IllegalArgumentException("User account DTO cannot be null");
+        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                userAccountDto.getUsername(), userAccountDto.getPassword())
+        );
+        return userAccountDto;
     }
 }

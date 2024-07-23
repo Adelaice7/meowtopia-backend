@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -32,6 +32,9 @@ public class CatDto {
 
     @NotNull(message = "Gender is required")
     private Gender gender;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdAt;
 
     private int weight;
     private boolean isFixed;

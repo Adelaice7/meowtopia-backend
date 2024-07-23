@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/user**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users**", "/api/users/login**").permitAll()
                         .requestMatchers("/error**", "/js/**", "/css/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -64,15 +64,6 @@ public class SecurityConfiguration {
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.authenticationEntryPoint(authenticationEntryPoint()));
 
         return http.build();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:8080");
-            }
-        };
     }
 
     @Bean

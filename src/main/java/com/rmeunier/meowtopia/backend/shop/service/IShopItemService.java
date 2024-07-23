@@ -3,17 +3,22 @@ package com.rmeunier.meowtopia.backend.shop.service;
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface IShopItemService {
-    ShopItem getShopItemById(UUID itemId);
+public interface IShopItemService<T extends ShopItem> {
 
-    Page<ShopItem> getAllShopItems(Integer size, Integer page, String sort, String direction);
+    List<T> getAllShopItems();
 
-    ShopItem createShopItem(ShopItem shopItem);
+    Page<T> getAllShopItems(Integer size, Integer page, String sort, String direction);
 
-    ShopItem updateShopItem(UUID shopItemId, ShopItem shopItem);
+    T getShopItemById(UUID itemId);
+
+    T createShopItem(T shopItem);
+
+    void updateStock(UUID productId, int i);
+
+    T updateShopItem(UUID shopItemId, T shopItem);
 
     boolean deleteShopItem(UUID itemId);
-
 }

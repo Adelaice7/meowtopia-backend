@@ -1,6 +1,7 @@
 package com.rmeunier.meowtopia.backend.shop.model.shopitems;
 
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -12,9 +13,16 @@ import lombok.Setter;
 @Entity
 @Table(name = "food")
 public class Food extends ShopItem {
+    @Column
     int effectHunger;
+
+    @Column
     int effectHappiness;
+
+    @Column
     int effectHealth;
+
+    @Column
     int effectEnergy;
 
     public Food(String name, Double price, int stock) {

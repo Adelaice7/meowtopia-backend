@@ -1,6 +1,5 @@
 package com.rmeunier.meowtopia.backend.user.api;
 
-import com.rmeunier.meowtopia.backend.cat.model.Cat;
 import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
 import com.rmeunier.meowtopia.backend.cat.service.ICatService;
 import com.rmeunier.meowtopia.backend.other.GenericResponse;
@@ -67,6 +66,11 @@ public class UserAccountApi {
     @PostMapping
     public ResponseEntity<UserAccountDto> signUpAndCreateUserAccount(@RequestBody @Valid UserAccountDto userAccountDto) {
         return ResponseEntity.ok(userAccountService.createUserAccount(userAccountDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserAccountDto> login(@RequestBody @Valid UserAccountDto userAccountDto) {
+        return ResponseEntity.ok(userAccountService.login(userAccountDto));
     }
 
     @PostMapping("{userAccountId}/cats")

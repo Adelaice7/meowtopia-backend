@@ -1,8 +1,5 @@
 package com.rmeunier.meowtopia.backend.shop.exception;
 
-import com.rmeunier.meowtopia.backend.shop.model.Product;
-import com.rmeunier.meowtopia.backend.shop.model.shopitems.Food;
-
 import java.util.UUID;
 
 public class ProductNotFoundException extends RuntimeException {

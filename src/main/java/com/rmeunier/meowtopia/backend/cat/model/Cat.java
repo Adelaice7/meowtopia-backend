@@ -19,7 +19,6 @@ import java.util.UUID;
 @Getter @Setter
 @AllArgsConstructor
 @Builder
-@ToString
 @Entity
 @Table(name = "cats")
 public class Cat {
@@ -119,12 +118,12 @@ public class Cat {
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private Date createdAt;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private Date updatedAt;
 
     // Constructors

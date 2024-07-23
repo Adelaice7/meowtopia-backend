@@ -28,8 +28,8 @@ public class Transaction {
     private UserAccount userAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "shop_item_id", nullable = false)
+    private ShopItem shopItem;
 
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
