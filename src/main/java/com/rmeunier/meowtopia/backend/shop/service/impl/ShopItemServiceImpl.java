@@ -1,5 +1,6 @@
 package com.rmeunier.meowtopia.backend.shop.service.impl;
 
+import com.rmeunier.meowtopia.backend.cat.utils.DateConverterUtil;
 import com.rmeunier.meowtopia.backend.shop.exception.ShopItemNotFoundException;
 import com.rmeunier.meowtopia.backend.shop.model.ShopItem;
 import com.rmeunier.meowtopia.backend.shop.repo.IShopItemRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +59,8 @@ public class ShopItemServiceImpl implements IShopItemService {
     @Override
     public ShopItem updateShopItem(UUID shopItemId, ShopItem shopItem) {
         if (shopItemRepository.existsById(shopItemId)) {
+            LocalDate currentDate = LocalDate.now();
+            shopItem.setUpdatedAt(DateConverterUtil.localDateToDate(currentDate));
             return shopItemRepository.save(shopItem);
         }
         return null;

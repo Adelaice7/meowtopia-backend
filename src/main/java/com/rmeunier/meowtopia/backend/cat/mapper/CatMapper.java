@@ -7,6 +7,7 @@ import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
 public class CatMapper {
     public static CatDto mapToDto(Cat cat) {
         return CatDto.builder()
+                .catId(cat.getCatId())
                 .name(cat.getName())
                 .breedName(cat.getBreed().getName())
                 .furColor(cat.getFurColor())
@@ -20,6 +21,12 @@ public class CatMapper {
                 .playfulness(cat.getPlayfulness())
                 .affectionate(cat.getAffectionate())
                 .laziness(cat.getLaziness())
+                .hunger(cat.getHunger())
+                .thirst(cat.getThirst())
+                .energy(cat.getEnergy())
+                .health(cat.getHealth())
+                .happiness(cat.getHappiness())
+                .createdAt(cat.getCreatedAt())
                 .build();
     }
 

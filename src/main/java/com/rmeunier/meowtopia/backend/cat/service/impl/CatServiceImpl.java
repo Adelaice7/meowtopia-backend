@@ -173,10 +173,7 @@ public class CatServiceImpl implements ICatService {
         existingCat.setEyeColor(updatedCat.getEyeColor());
 
         LocalDate currentDate = LocalDate.now();
-        if (updatedCat.getUpdatedAt() != null && existingCat.getUpdatedAt() != updatedCat.getUpdatedAt()) {
-            existingCat.setUpdatedAt(DateConverterUtil.localDateToDate(currentDate));
-            existingCat.setAgeInDays(updatedCat.calculateAge());
-        }
+        existingCat.setUpdatedAt(DateConverterUtil.localDateToDate(currentDate));
 
         existingCat.setGender(updatedCat.getGender());
         existingCat.setWeight(updatedCat.getWeight());
@@ -196,6 +193,7 @@ public class CatServiceImpl implements ICatService {
         existingCat.setCleanliness(updatedCat.getCleanliness());
 
         Cat save = catRepository.save(existingCat);
+
         return CatMapper.mapToDto(save);
     }
 

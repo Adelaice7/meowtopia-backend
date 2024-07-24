@@ -33,7 +33,7 @@ public class CatDto {
     @NotNull(message = "Gender is required")
     private Gender gender;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private Date createdAt;
 
     private int weight;
@@ -46,9 +46,9 @@ public class CatDto {
     private int affectionate;
     private int laziness;
 
-    private int happiness;
     private int hunger;
     private int thirst;
+    private int happiness;
     private int health;
     private int energy;
     private int cleanliness;

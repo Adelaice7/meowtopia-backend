@@ -8,12 +8,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @PasswordMatches
 public class UserAccountDto {
+
+    private UUID userAccountId;
+
     @NotNull(message = "Username is required")
     @NotEmpty
     private String username;

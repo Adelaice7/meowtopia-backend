@@ -2,6 +2,7 @@ package com.rmeunier.meowtopia.backend.user.service.impl;
 
 import com.rmeunier.meowtopia.backend.cat.mapper.CatMapper;
 import com.rmeunier.meowtopia.backend.cat.model.dto.CatDto;
+import com.rmeunier.meowtopia.backend.cat.utils.DateConverterUtil;
 import com.rmeunier.meowtopia.backend.user.exception.UserAccountNotFoundException;
 import com.rmeunier.meowtopia.backend.user.mapper.UserAccountMapper;
 import com.rmeunier.meowtopia.backend.user.model.UserAccount;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,6 +90,10 @@ public class UserAccountServiceImpl implements IUserAccountService {
             // Here we update username and email only for example, you can add more
             existingUserAccount.setUsername(userAccountDto.getUsername());
             existingUserAccount.setEmail(userAccountDto.getEmail());
+
+
+            LocalDate currentDate = LocalDate.now();
+            existingUserAccount.setUpdatedAt(DateConverterUtil.localDateToDate(currentDate));
 
             // Save updated user account
             existingUserAccount = userAccountRepository.save(existingUserAccount);

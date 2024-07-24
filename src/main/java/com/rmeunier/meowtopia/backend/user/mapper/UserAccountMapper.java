@@ -10,6 +10,7 @@ public class UserAccountMapper {
 
     public static UserAccountDto mapToDto(UserAccount userAccount) {
         return UserAccountDto.builder()
+                .userAccountId(userAccount.getUserAccountId())
                 .email(userAccount.getEmail())
                 .password(userAccount.getPasswordHash())
                 .username(userAccount.getUsername())

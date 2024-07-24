@@ -1,8 +1,10 @@
 package com.rmeunier.meowtopia.backend.shop.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter @Setter
@@ -24,6 +26,18 @@ public abstract class ShopItem {
 
     @Column(name = "stock")
     private int stock;
+
+    // Dates and timestamps
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date updatedAt;
 
     public ShopItem(String name, Double price, int stock) {
         this.name = name;
